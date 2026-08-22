@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Campus Copilot - Student Vault & Intelligence Hub</title>
+  <link rel="icon" type="image/png" sizes="48x48" href="icons/icon-48.png">
+  <style>
+    :root {
+      --bg-base: #070a13;
+      --sidebar-bg: rgba(13, 18, 30, 0.85);
+      --card-bg: rgba(17, 24, 39, 0.65);
+      --card-border: rgba(255, 255, 255, 0.07);
+      --card-hover-border: rgba(56, 189, 248, 0.3);
+      --accent-cyan: #38bdf8;
+      --accent-indigo: #6366f1;
+      --accent-emerald: #10b981;
+      --accent-rose: #f43f5e;
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; }
+    body {
+      background: radial-gradient(circle at 15% 15%, #1e1b4b 0%, #070a13 55%, #020617 100%);
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+    }
+
+    /* Layout Structure */
+    .app-layout { display: flex; width: 100vw; height: 100vh; overflow: hidden; }
+
+    /* Glass Sidebar Navigation */
+    .sidebar {
+      width: 280px;
+      background: var(--sidebar-bg);
+      backdrop-filter: blur(24px);
+      border-right: 1px solid var(--card-border);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 24px 16px;
+      flex-shrink: 0;
+      z-index: 10;
+    }
+    .brand-section { display: flex; align-items: center; gap: 12px; padding: 0 8px 24px; border-bottom: 1px solid var(--card-border); }
+    .brand-logo {
+      width: 42px; height: 42px;
+      background: linear-gradient(135deg, var(--accent-cyan), var(--accent-indigo));
+      border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 0 20px rgba(56, 189, 248, 0.4);
+    }
+    .brand-logo svg { width: 24px; height: 24px; fill: none; stroke: #fff; stroke-width: 2.2; }
+    .brand-text h1 { font-size: 17px; font-weight: 800; letter-spacing: -0.3px; }
+    .brand-badge { font-size: 10px; background: rgba(56, 189, 248, 0.15); color: var(--accent-cyan); border: 1px solid rgba(56, 189, 248, 0.3); padding: 1px 6px; border-radius: 999px; font-weight: 700; margin-left: 4px; }
+
+    /* Navigation Menu */
+    .nav-list { list-style: none; margin-top: 20px; display: flex; flex-direction: column; gap: 6px; }
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 14px;
+      border-radius: 12px;
+      color: var(--text-muted);
+      font-size: 13.5px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      border: 1px solid transparent;
+    }
+    .nav-item svg { width: 18px; height: 18px; stroke: currentColor; fill: none; stroke-width: 2; }
+    .nav-item:hover { color: #fff; background: rgba(255, 255, 255, 0.05); }
+    .nav-item.active {
+      color: #fff;
+      background: linear-gradient(135deg, rgba(56, 189, 248, 0.15), rgba(99, 102, 241, 0.15));
+      border-color: rgba(56, 189, 248, 0.3);
+      box-shadow: 0 4px 15px rgba(56, 189, 248, 0.1);
+    }
+    .nav-item.active svg { stroke: var(--accent-cyan); }
+
+    /* Main Viewport */
+    .main-viewport {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+      overflow-y: auto;
+      padding: 28px 36px;
+    }
+
+    /* Top Bar */
+    .top-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 24px;
+    }
+    .page-title h2 { font-size: 22px; font-weight: 800; letter-spacing: -0.5px; }
+    .page-title p { font-size: 13px; color: var(--text-muted); margin-top: 3px; }
+    .top-actions { display: flex; gap: 10px; }
+
+    /* Tab Content Area */
+    .tab-panel { display: none; animation: fadeIn 0.25s ease-out forwards; }
+    .tab-panel.active { display: block; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+
+    /* Card Panels */
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px; }
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      backdrop-filter: blur(16px);
+      border-radius: 18px;
+      padding: 22px;
+      transition: border-color 0.2s;
+    }
+    .card:hover { border-color: var(--card-hover-border); }
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+    .card-title { font-size: 14.5px; font-weight: 700; color: var(--accent-cyan); display: flex; align-items: center; gap: 8px; }
+    .card-title svg { width: 17px; height: 17px; stroke: currentColor; fill: none; stroke-width: 2; }
+
+    /* Inputs */
+    .form-group { margin-bottom: 14px; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    label { display: block; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.7px; color: var(--text-muted); margin-bottom: 6px; }
+    input, select, textarea {
+      width: 100%;
+      background: rgba(10, 14, 23, 0.85);
+      border: 1px solid var(--card-border);
+      color: #fff;
+      padding: 10px 14px;
+      border-radius: 10px;
+      font-size: 13.5px;
+      outline: none;
+      transition: all 0.2s;
+    }
+    input:focus, select:focus, textarea:focus {
+      border-color: var(--accent-cyan);
+      box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.15);
+      background: rgba(10, 14, 23, 1);
+    }
+    textarea { resize: vertical; }
+
+    /* Buttons */
+    .btn {
+      cursor: pointer;
+      padding: 9px 16px;
+      border-radius: 10px;
+      font-size: 13px;
+      font-weight: 600;
+      border: 1px solid transparent;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      transition: all 0.2s;
+    }
+    .btn-primary {
+      background: linear-gradient(135deg, #2563eb, #38bdf8);
+      color: white;
+      box-shadow: 0 4px 14px rgba(37, 99, 235, 0.35);
+    }
+    .btn-primary:hover { opacity: 0.95; transform: translateY(-1px); box-shadow: 0 6px 20px rgba(56, 189, 248, 0.4); }
+    .btn-secondary {
+      background: rgba(255, 255, 255, 0.05);
+      border-color: var(--card-border);
+      color: var(--text-main);
+    }
+    .btn-secondary:hover { background: rgba(255, 255, 255, 0.1); }
+    .btn-mic {
+      background: rgba(244, 63, 94, 0.12);
+      border: 1px solid rgba(244, 63, 94, 0.3);
+      color: #fda4af;
+      padding: 4px 10px;
+      border-radius: 8px;
+      font-size: 11px;
+    }
+    .btn-mic:hover { background: rgba(244, 63, 94, 0.25); color: #fff; }
+    .mic-recording {
+      background: var(--accent-rose) !important;
+      color: white !important;
+      animation: pulse-recording 1.2s infinite;
+    }
+    @keyframes pulse-recording {
+      0% { box-shadow: 0 0 0 0 rgba(244, 63, 94, 0.7); }
+      70% { box-shadow: 0 0 0 8px rgba(244, 63, 94, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(244, 63, 94, 0); }
+    }
+
+    /* Slider */
+    input[type=range] {
+      -webkit-appearance: none;
+      height: 6px;
+      background: #1e293b;
+      border-radius: 5px;
+      border: none;
+      padding: 0;
+    }
+    input[type=range]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      height: 18px;
+      width: 18px;
+      border-radius: 50%;
+      background: var(--accent-cyan);
+      cursor: pointer;
+      box-shadow: 0 0 10px var(--accent-cyan);
+    }
+
+    /* Global Sync Footer */
+    .sync-footer {
+      position: sticky;
+      bottom: 0;
+      background: rgba(13, 18, 30, 0.85);
+      backdrop-filter: blur(16px);
+      border-top: 1px solid var(--card-border);
+      padding: 16px 0;
+      margin-top: auto;
+      display: flex;
+      justify-content: flex-end;
+    }
+
+    .toast {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      background: rgba(16, 185, 129, 0.95);
+      backdrop-filter: blur(10px);
+      color: white;
+      padding: 12px 20px;
+      border-radius: 12px;
+      font-weight: 600;
+      font-size: 13.5px;
+      display: none;
+      box-shadow: 0 10px 20px rgba(0,0,0,0.5);
+      z-index: 1000;
+    }
+  </style>
+</head>
+<body>
+  <div class="app-layout">
+    <!-- Left Navigation Sidebar -->
+    <aside class="sidebar">
+      <div>
+        <div class="brand-section">
+          <div class="brand-logo">
+            <svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+          </div>
+          <div class="brand-text">
+            <h1>Campus Copilot <span class="brand-badge">MV3</span></h1>
+            <p style="font-size:11px; color:var(--text-muted); margin-top:2px;">Intelligence & Form Vault</p>
+          </div>
+        </div>
+
+        <ul class="nav-list">
+          <li class="nav-item active" data-tab="tab-profile">
+            <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            Student Profile
+          </li>
+          <li class="nav-item" data-tab="tab-cr">
+            <svg viewBox="0 0 24 24"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+            CR / WhatsApp Parser
+          </li>
+          <li class="nav-item" data-tab="tab-reviews">
+            <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+            Campus Reviews Vault
+          </li>
+          <li class="nav-item" data-tab="tab-settings">
+            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+            AI Engine & Settings
+          </li>
+        </ul>
+      </div>
+
+      <div style="padding: 12px; background: rgba(255,255,255,0.03); border-radius:12px; border: 1px solid var(--card-border);">
+        <p style="font-size:11px; color:var(--text-muted);">Status</p>
+        <div style="display:flex; align-items:center; gap:6px; margin-top:4px;">
+          <div style="width:8px; height:8px; border-radius:50%; background:var(--accent-emerald);"></div>
+          <span style="font-size:12px; font-weight:700; color:#fff;">Extension Active</span>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Viewport Content -->
+    <main class="main-viewport">
+      <div class="top-bar">
+        <div class="page-title">
+          <h2 id="viewTitle">Student Profile Vault</h2>
+          <p id="viewSubtitle">Manage identity credentials and core university records</p>
+        </div>
+        <div class="top-actions">
+          <button id="exportBtn" class="btn btn-secondary">💾 Export Backup</button>
+          <button id="importBtn" class="btn btn-secondary">📂 Import Backup</button>
+          <input type="file" id="importFileInput" style="display:none" accept=".json">
+        </div>
+      </div>
+
+      <!-- TAB 1: Student Profile -->
+      <section id="tab-profile" class="tab-panel active">
+        <div class="grid-2">
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">
+                <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                Core Identity
+              </div>
+            </div>
+            <div class="form-group">
+              <label>Full Legal Name</label>
+              <input type="text" id="fullName" placeholder="Debojyoti Dhar">
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label>Full Registration / Roll No</label>
+                <input type="text" id="rollNo" placeholder="26BCS10220">
+              </div>
+              <div class="form-group">
+                <label>Numeric Roll (Digits Only)</label>
+                <input type="text" id="numericRoll" placeholder="10220">
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label>Contact Number</label>
+                <input type="text" id="phoneNumber" placeholder="9883593329">
+              </div>
+              <div class="form-group">
+                <label>College Email</label>
+                <input type="email" id="collegeEmail" placeholder="debojyoti.26bcs10220@sst.scaler.com">
+              </div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">
+                <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                Academic Section & Bio
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label>Graduation Year</label>
+                <input type="text" id="gradYear" placeholder="2030">
+              </div>
+              <div class="form-group">
+                <label>Section / Batch</label>
+                <input type="text" id="batchSection" placeholder="A">
+              </div>
+            </div>
+            <div class="form-group">
+              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+                <label style="margin:0;">Bio & Relevant Skills</label>
+                <button id="micBioBtn" class="btn btn-mic">🎙️ Dictate</button>
+              </div>
+              <textarea id="bio" rows="4" placeholder="Full-Stack Developer & AI Systems Engineer proficient in React, Next.js, Node.js, Python, Chrome Extensions..."></textarea>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- TAB 2: CR & WhatsApp Parser -->
+      <section id="tab-cr" class="tab-panel">
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">
+              <svg viewBox="0 0 24 24"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+              WhatsApp Announcement & CR Instruction Parser
+            </div>
+            <button id="micCrBtn" class="btn btn-mic">🎙️ Dictate</button>
+          </div>
+          <p style="font-size:12.5px; color:var(--text-muted); margin-bottom:12px;">
+            Paste unformatted announcement text directly from class WhatsApp groups. The AI priority engine will automatically parse tracks, mentor assignments, and submission guidelines to override default answers.
+          </p>
+          <div class="form-group">
+            <textarea id="crAnnouncement" rows="7" placeholder="Paste WhatsApp announcement (e.g. Choose Track 2: Generative AI, Mentor: Dr. Ramanujan, Team: ByteForce)..."></textarea>
+          </div>
+          <div style="display:flex; gap:10px;">
+            <button id="sampleCrBtn" class="btn btn-secondary">Insert Sample CR Notice</button>
+            <button id="clearCrBtn" class="btn btn-secondary">Clear Notice</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- TAB 3: Campus Reviews Vault -->
+      <section id="tab-reviews" class="tab-panel">
+        <div class="grid-2">
+          <!-- Hostel Feedback -->
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">🏢 Hostel & Living Facilities</div>
+            </div>
+            <div class="form-group">
+              <label>Hostel Block & Room No</label>
+              <input type="text" id="hostelRoom" placeholder="Block B, Room 412">
+            </div>
+            <div class="form-group">
+              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+                <label style="margin:0;">Water Quality & Supply</label>
+                <button id="micWaterBtn" class="btn btn-mic">🎙️ Dictate</button>
+              </div>
+              <textarea id="waterFeedback" rows="2" placeholder="Water supply is consistent, RO drinking water is clean."></textarea>
+            </div>
+            <div class="form-group">
+              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+                <label style="margin:0;">Hostel Wi-Fi Speed & Connectivity</label>
+                <button id="micHostelWifiBtn" class="btn btn-mic">🎙️ Dictate</button>
+              </div>
+              <textarea id="hostelWifiFeedback" rows="2" placeholder="Wi-Fi connectivity is reliable in study lounge with low latency."></textarea>
+            </div>
+            <div class="form-group">
+              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+                <label style="margin:0;">Cleanliness & Staff Behavior</label>
+                <button id="micCleanBtn" class="btn btn-mic">🎙️ Dictate</button>
+              </div>
+              <textarea id="cleanlinessFeedback" rows="2" placeholder="Housekeeping staff are prompt and courteous. Washrooms are sanitized regularly."></textarea>
+            </div>
+          </div>
+
+          <!-- Mess & Academics Feedback -->
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">🍽️ Dining, Academics & Wellness</div>
+            </div>
+            <div class="form-group">
+              <label>Mess Food Rating (1-5): <span id="messRatingValue" style="color:var(--accent-cyan); font-weight:700;">4 / 5</span></label>
+              <input type="range" id="messRatingSlider" min="1" max="5" value="4">
+            </div>
+            <div class="form-group">
+              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+                <label style="margin:0;">Food Quality & Menu Notes</label>
+                <button id="micFoodBtn" class="btn btn-mic">🎙️ Dictate</button>
+              </div>
+              <textarea id="foodQualityFeedback" rows="2" placeholder="Meals are nutritious, hygienic, and balanced. Morning breakfast spread is fresh."></textarea>
+            </div>
+            <div class="form-group">
+              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+                <label style="margin:0;">Faculty & Teaching Quality</label>
+                <button id="micFacultyBtn" class="btn btn-mic">🎙️ Dictate</button>
+              </div>
+              <textarea id="facultyFeedback" rows="2" placeholder="Instructors explain theoretical concepts with practical industry applications."></textarea>
+            </div>
+            <div class="form-group">
+              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+                <label style="margin:0;">Clubs, Activities & Mental Wellbeing</label>
+                <button id="micClubBtn" class="btn btn-mic">🎙️ Dictate</button>
+              </div>
+              <textarea id="clubInterests" rows="2" placeholder="Active in Coding & Cultural clubs. Workload is well balanced with academic curriculum."></textarea>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- TAB 4: AI Engine & Settings -->
+      <section id="tab-settings" class="tab-panel">
+        <div class="grid-2">
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">
+                <svg viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+                Google Gemini API Configuration
+              </div>
+              <span id="apiStatus" style="font-size:12px; font-weight:700;"></span>
+            </div>
+            <div class="form-group">
+              <label>Gemini API Key</label>
+              <div style="display:flex; gap:8px;">
+                <input type="password" id="geminiApiKey" placeholder="Enter API Key from Google AI Studio">
+                <button id="testApiKeyBtn" class="btn btn-secondary">Test Connection</button>
+              </div>
+            </div>
+            <div class="form-group">
+              <label>Target LLM Engine</label>
+              <select id="modelSelect">
+                <option value="models/gemini-3.6-flash">Gemini 3.6 Flash (Fastest & Production-Ready)</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">🌟 General Sentiment & Tone Slider</div>
+              <span id="sentimentValue" style="color:var(--accent-cyan); font-weight:800;">4 / 5</span>
+            </div>
+            <div class="form-group">
+              <label>Default Form Response Tone</label>
+              <input type="range" id="sentimentSlider" min="1" max="5" value="4">
+            </div>
+            <div class="form-group">
+              <label>General Feedback Note</label>
+              <textarea id="sentimentNotes" rows="3" placeholder="Facilities, academic pacing, and campus ecosystem are well-structured."></textarea>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Persistent Global Sync Action Bar -->
+      <div class="sync-footer">
+        <button id="saveBtn" class="btn btn-primary" style="padding: 12px 28px; font-size:14px;">
+          💾 Save Profile & Sync Context
+        </button>
+      </div>
+    </main>
+  </div>
+
+  <div id="toast" class="toast">Saved Successfully! ✅</div>
+  <script src="dashboard.js"></script>
+</body>
+</html>

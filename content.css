@@ -1,0 +1,68 @@
+#campus-copilot-root {
+  position: fixed;
+  top: 18px;
+  right: 18px;
+  z-index: 2147483647;
+  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  user-select: none;
+}
+.cc-pill {
+  background: rgba(9, 13, 22, 0.9);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(14px);
+  color: #fff;
+  padding: 6px 10px;
+  border-radius: 999px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.5);
+  transition: all 0.2s;
+}
+.cc-pill:hover { border-color: #38bdf8; box-shadow: 0 0 20px rgba(56, 189, 248, 0.3); }
+.cc-logo {
+  width: 28px;
+  height: 28px;
+  background: linear-gradient(135deg, #38bdf8, #818cf8);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.cc-logo svg { width: 16px; height: 16px; fill: none; stroke: #fff; stroke-width: 2.2; }
+.cc-action-btn {
+  background: linear-gradient(135deg, #2563eb, #38bdf8);
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  transition: opacity 0.2s;
+}
+.cc-action-btn:hover { opacity: 0.9; }
+.cc-mic-btn {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #fff;
+  padding: 6px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.cc-mic-btn:hover { background: rgba(255, 255, 255, 0.15); }
+.cc-mic-active {
+  background: #f43f5e !important;
+  color: white !important;
+  animation: cc-pulse-mic 1.2s infinite;
+}
+@keyframes cc-pulse-mic {
+  0% { box-shadow: 0 0 0 0 rgba(244, 63, 94, 0.7); }
+  70% { box-shadow: 0 0 0 8px rgba(244, 63, 94, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(244, 63, 94, 0); }
+}
