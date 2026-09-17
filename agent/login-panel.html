@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Campus Copilot - Secure Authentication</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-base: #FFFBF7; /* Pale Cream */
+      --card-bg: #FFFFFF; /* Crisp White */
+      --card-border: rgba(74, 74, 74, 0.12);
+      --accent-teal: #38A3A5;
+      --accent-rose: #FAB1A0;
+      --mint-green: #2A9D8F; /* Deep Ocean Teal */
+      --text-main: #4A4A4A;
+      --text-muted: rgba(74, 74, 74, 0.7);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Inter', sans-serif;
+    }
+
+    body {
+      background-color: var(--bg-base);
+      background: radial-gradient(circle at 50% 0%, rgba(250, 177, 160, 0.15) 0%, rgba(129, 236, 236, 0.05) 0%, var(--bg-base) 80%);
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+
+    .login-container {
+      width: 100%;
+      max-width: 420px;
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 24px;
+      padding: 40px 32px;
+      box-shadow: 0 10px 25px rgba(74, 74, 74, 0.04);
+      text-align: center;
+      animation: loadUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    @keyframes loadUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .logo-container {
+      width: 56px;
+      height: 56px;
+      background: linear-gradient(135deg, var(--bg-base), var(--mint-green));
+      border-radius: 16px;
+      margin: 0 auto 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 1.5px solid var(--text-main);
+      box-shadow: 0 4px 10px rgba(74, 74, 74, 0.05);
+    }
+
+    .logo-container svg {
+      width: 32px;
+      height: 32px;
+      fill: none;
+      stroke: var(--text-main);
+      stroke-width: 2.2;
+    }
+
+    .title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 24px;
+      font-weight: 700;
+      margin-bottom: 8px;
+      letter-spacing: -0.5px;
+    }
+
+    .subtitle {
+      font-size: 14px;
+      color: var(--text-muted);
+      margin-bottom: 32px;
+    }
+
+    .form-group {
+      text-align: left;
+      margin-bottom: 24px;
+    }
+
+    label {
+      display: block;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--text-muted);
+      margin-bottom: 8px;
+    }
+
+    input {
+      width: 100%;
+      background: #FFFFFF;
+      border: 1px solid rgba(74, 74, 74, 0.2);
+      color: var(--text-main);
+      padding: 14px 16px;
+      border-radius: 12px;
+      font-size: 15px;
+      outline: none;
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    input:focus {
+      border-color: var(--mint-green);
+      box-shadow: 0 0 0 3px rgba(129, 236, 236, 0.2);
+      background: #FFFFFF;
+    }
+
+    .btn {
+      width: 100%;
+      padding: 14px;
+      background: var(--mint-green);
+      color: #FFFFFF; /* Crisp White text inside Mint Green buttons */
+      border: 1px solid rgba(74, 74, 74, 0.15);
+      border-radius: 12px;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(42, 157, 143, 0.3);
+      transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+    }
+
+    .btn:hover {
+      transform: translateY(-8px) scale(1.02);
+      box-shadow: 0 16px 36px rgba(42, 157, 143, 0.4);
+    }
+
+    .btn-google {
+      width: 100%;
+      padding: 14px 16px;
+      background: #FFFFFF;
+      border: 1px solid rgba(74, 74, 74, 0.25);
+      border-radius: 12px;
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--text-main);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      box-shadow: 0 2px 8px rgba(74, 74, 74, 0.03);
+      transition: all 0.3s ease;
+      margin-bottom: 12px;
+    }
+
+    .btn-google:hover {
+      background: #F8F9FA;
+      box-shadow: 0 4px 14px rgba(74, 74, 74, 0.08);
+      border-color: rgba(74, 74, 74, 0.35);
+    }
+
+    .btn-google svg {
+      width: 20px;
+      height: 20px;
+    }
+
+    .error-msg {
+      color: #f43f5e;
+      font-size: 13px;
+      margin-top: 12px;
+      font-weight: 600;
+      display: none;
+    }
+
+    .mock-bypass-btn {
+      display: inline-block;
+      font-size: 12.5px;
+      margin-top: 8px;
+      color: var(--mint-green);
+      font-weight: 700;
+      text-decoration: none;
+      transition: opacity 0.2s;
+    }
+
+    .mock-bypass-btn:hover {
+      opacity: 0.8;
+      text-decoration: underline;
+    }
+  </style>
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
+  <script src="../lib/supabase.js"></script>
+  <script src="../lib/supabaseClient.js"></script>
+</head>
+<body>
+  <div class="login-container">
+    <div class="logo-container" style="background: none; border: none; box-shadow: none; width: 56px; height: 56px; padding: 0;">
+      <img src="../icons/campus_copilot_icon.svg" alt="Icon" style="width: 100%; height: 100%; object-fit: contain;">
+    </div>
+    <h2 class="title" style="font-size: 22px;">Welcome to Campus Copilot</h2>
+    <p class="subtitle" style="margin-bottom: 24px;">Your intelligent assistant for repetitive student tasks.</p>
+    
+    <!-- Google OAuth Button -->
+    <div id="googleBtnContainer" style="margin-bottom: 20px;">
+      <div id="g_id_onload"
+           data-client_id="YOUR_GOOGLE_CLIENT_ID.apps.googleusercontent.com"
+           data-context="signin"
+           data-ux_mode="popup"
+           data-callback="handleGoogleLogin"
+           data-auto_prompt="false">
+      </div>
+      <div class="g_id_signin"
+           data-type="standard"
+           data-shape="rectangular"
+           data-theme="outline"
+           data-text="continue_with"
+           data-size="large"
+           data-logo_alignment="left"
+           data-width="356">
+      </div>
+      
+      <a href="#" id="mockBypassBtn" class="mock-bypass-btn">
+        ✨ Test Mode: Skip Google OAuth
+      </a>
+    </div>
+
+    <div style="display: flex; align-items: center; justify-content: center; gap: 12px; margin-bottom: 20px; color: var(--text-muted); font-size: 11px; font-weight: 700; letter-spacing: 0.5px;">
+      <span style="height: 1px; background: rgba(74, 74, 74, 0.12); flex: 1;"></span>
+      <span>OR USE PASSCODE</span>
+      <span style="height: 1px; background: rgba(74, 74, 74, 0.12); flex: 1;"></span>
+    </div>
+
+    <form id="loginForm">
+      <div class="form-group" style="margin-bottom: 16px;">
+        <label for="passcode">Enter Security Passcode</label>
+        <input type="password" id="passcode" placeholder="••••••••" required>
+      </div>
+      <button type="submit" class="btn">Authenticate Access</button>
+      <div id="error" class="error-msg">Invalid authentication passcode (try admin123).</div>
+    </form>
+  </div>
+
+  <script>
+    // Decodes JWT locally without libraries
+    function decodeJwt(token) {
+      try {
+        const base64Url = token.split('.')[1];
+        const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+        const jsonPayload = decodeURIComponent(window.atob(base64).split('').map(function(c) {
+          return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+        }).join(''));
+        return JSON.parse(jsonPayload);
+      } catch (e) {
+        return null;
+      }
+    }
+
+    const isSupabaseConfigured = window.supabaseClient && !window.supabaseClient.supabaseUrl.includes('YOUR_PROJECT_REF');
+
+    // Supabase Auth Helper: Signs Up/In via email+password to mimic OAuth or traditional passcode auth
+    async function authenticateWithSupabase(email, password, metadata) {
+      if (!isSupabaseConfigured) {
+        console.warn('Supabase not configured. Operating in local mock mode.');
+        return null;
+      }
+
+      // 1. Try to sign in
+      let { data, error } = await window.supabaseClient.auth.signInWithPassword({ email, password });
+      
+      // 2. If user doesn't exist, sign up
+      if (error && (error.message.includes('Invalid login credentials') || error.message.includes('User not found'))) {
+        const signupRes = await window.supabaseClient.auth.signUp({
+          email,
+          password,
+          options: {
+            data: metadata
+          }
+        });
+        data = signupRes.data;
+        error = signupRes.error;
+      }
+
+      if (error) {
+        throw error;
+      }
+      return data.session;
+    }
+
+    // Direct Google authentication callback handler
+    window.handleGoogleLogin = async function (response) {
+      const payload = decodeJwt(response.credential);
+      if (payload) {
+        try {
+          let sessionUser = {
+            userId: payload.sub,
+            name: payload.name,
+            email: payload.email,
+            picture: payload.picture,
+            provider: 'google'
+          };
+
+          if (isSupabaseConfigured) {
+            // Sign in to Supabase Auth using raw payload credentials
+            const session = await authenticateWithSupabase(payload.email, 'google-bypass-password-999', {
+              full_name: payload.name,
+              avatar_url: payload.picture
+            });
+            if (session) {
+              sessionUser.userId = session.user.id;
+              sessionUser.supabaseToken = session.access_token;
+            }
+          }
+          processSessionLogin(sessionUser);
+        } catch (err) {
+          alert('Supabase Auth authentication failed: ' + err.message);
+        }
+      } else {
+        alert("Google sign-in was cancelled or failed. Please try again.");
+      }
+    };
+
+    // Skip Google Sign In for easy offline testing
+    document.getElementById('mockBypassBtn').addEventListener('click', async (e) => {
+      e.preventDefault();
+      try {
+        let sessionUser = {
+          userId: 'mock-google-user-999',
+          name: 'Alex Johnson',
+          email: 'alex.j@gmail.com',
+          picture: 'https://lh3.googleusercontent.com/a/default-user',
+          provider: 'google-mock'
+        };
+
+        if (isSupabaseConfigured) {
+          const session = await authenticateWithSupabase('alex.j@gmail.com', 'mock-password-123', {
+            full_name: 'Alex Johnson',
+            avatar_url: 'https://lh3.googleusercontent.com/a/default-user'
+          });
+          if (session) {
+            sessionUser.userId = session.user.id;
+            sessionUser.supabaseToken = session.access_token;
+          }
+        }
+        processSessionLogin(sessionUser);
+      } catch (err) {
+        alert('Supabase Mock Bypass authentication failed: ' + err.message);
+      }
+    });
+
+    // Traditional passcode access
+    document.getElementById('loginForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const code = document.getElementById('passcode').value;
+      const errorDiv = document.getElementById('error');
+
+      if (code === 'admin123') {
+        errorDiv.style.display = 'none';
+        try {
+          let sessionUser = {
+            userId: 'passcode-user-100',
+            name: 'Demo Admin',
+            email: 'admin@university.edu',
+            picture: '',
+            provider: 'passcode'
+          };
+
+          if (isSupabaseConfigured) {
+            const session = await authenticateWithSupabase('admin@university.edu', 'admin-password-123', {
+              full_name: 'Demo Admin',
+              avatar_url: ''
+            });
+            if (session) {
+              sessionUser.userId = session.user.id;
+              sessionUser.supabaseToken = session.access_token;
+            }
+          }
+          processSessionLogin(sessionUser);
+        } catch (err) {
+          alert('Supabase Passcode authentication failed: ' + err.message);
+        }
+      } else {
+        errorDiv.style.display = 'block';
+        document.getElementById('passcode').value = '';
+      }
+    });
+
+    // Writes session credentials to storage and redirects
+    function processSessionLogin(sessionData) {
+      const storeSession = () => {
+        // Fetch profiles to check if profile exists
+        if (typeof chrome !== 'undefined' && chrome.storage && chrome.storage.local) {
+          chrome.storage.local.get(['studentProfiles'], (result) => {
+            const profiles = result.studentProfiles || {};
+            const userProfile = profiles[sessionData.userId];
+            // Check if profile exists and has completion > 0
+            const hasCompleteProfile = userProfile && userProfile.onboardingComplete === true;
+            
+            if (hasCompleteProfile) {
+              window.location.href = '../dashboard.html';
+            } else {
+              window.location.href = '../onboarding.html';
+            }
+          });
+        } else {
+          const profiles = JSON.parse(localStorage.getItem('studentProfiles') || '{}');
+          const userProfile = profiles[sessionData.userId];
+          const hasCompleteProfile = userProfile && userProfile.onboardingComplete === true;
+          
+          if (hasCompleteProfile) {
+            window.location.href = '../dashboard.html';
+          } else {
+            window.location.href = '../onboarding.html';
+          }
+        }
+      };
+
+      if (typeof chrome !== 'undefined' && chrome.storage && chrome.storage.local) {
+        chrome.storage.local.set({ 
+          isLoggedIn: true, 
+          ccSession: sessionData 
+        }, storeSession);
+      } else {
+        localStorage.setItem('isLoggedIn', 'true');
+        localStorage.setItem('ccSession', JSON.stringify(sessionData));
+        storeSession();
+      }
+    }
+  </script>
+</body>
+</html>

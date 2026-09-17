@@ -12,8 +12,7 @@
     collegeEmail: "debojyoti.26bcs10220@sst.scaler.com",
     bio: "Full-Stack Developer & AI Systems Engineer proficient in React, Next.js, Node.js, Python, Chrome Extensions, Google Gemini API, and distributed cloud systems.",
     sentimentNotes: "Food quality is hygienic and nutritious. Hostel facilities and Wi-Fi are well maintained.",
-    sentimentSlider: "4",
-    crAnnouncement: "Track 2: Generative AI & Automation, Mentor: Dr. Ramanujan, Team: ByteForce"
+    sentimentSlider: "4"
   };
 
   // Sync with Storage
@@ -31,9 +30,15 @@
   root.innerHTML = `
     <div class="cc-pill" id="ccPill">
       <div class="cc-logo">
-        <svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+        <svg viewBox="0 0 512 512" style="width: 22px; height: 22px; display: block;">
+          <rect width="512" height="512" rx="128" fill="#2A9D8F" />
+          <path d="M 280 100 C 170 100, 100 170, 100 280 C 100 390, 170 460, 280 460" fill="none" stroke="#FFFFFF" stroke-width="36" stroke-linecap="round" />
+          <path d="M 280 180 C 210 180, 170 220, 170 280 C 170 340, 210 380, 280 380" fill="none" stroke="#FFFFFF" stroke-width="30" stroke-linecap="round" opacity="0.9" />
+          <circle cx="280" cy="280" r="28" fill="#FFFFFF" />
+          <path d="M 240 280 L 280 320 L 370 210" fill="none" stroke="#FAB1A0" stroke-width="32" stroke-linecap="round" stroke-linejoin="round" />
+        </svg>
       </div>
-      <span id="ccStatusText" style="font-size:12.5px; font-weight:700;">Campus Copilot</span>
+      <span id="ccStatusText">Campus Copilot</span>
       <button class="cc-action-btn" id="ccRunFillBtn">⚡ Auto-Fill</button>
       <button class="cc-mic-btn" id="ccVoiceBtn" title="Speak into focused field">🎙️</button>
     </div>
@@ -182,12 +187,6 @@
       // 9. Generic Radio / Checkbox Option Fallback (e.g., Track or Dietary)
       const anyOptions = Array.from(card.querySelectorAll('div[role="radio"], div[role="checkbox"], .docssharedWizTogglelabeledContainer'));
       if (anyOptions.length > 0) {
-        // If CR mentions track 2, pick matching
-        if (vault.crAnnouncement && vault.crAnnouncement.includes('Track 2')) {
-          const trackOpt = anyOptions.find(o => o.textContent.toLowerCase().includes('track 2') || o.textContent.toLowerCase().includes('generative'));
-          if (trackOpt) { triggerGoogleFormsOptionClick(trackOpt); return; }
-        }
-        // Else default to first option
         triggerGoogleFormsOptionClick(anyOptions[0]);
       }
     });
@@ -229,7 +228,6 @@
     const apiKey = vault.geminiApiKey || vault.apiKey || '';
     const prompt = `You are Campus Copilot filling this university form for ${vault.fullName}.
 Profile: Name: ${vault.fullName}, Roll: ${vault.rollNo}, Digits Roll: ${vault.numericRoll}, Phone: ${vault.phoneNumber}, Year: ${vault.gradYear}, Batch: ${vault.batchSection}, Email: ${vault.collegeEmail}, Bio: ${vault.bio}, Notes: ${vault.sentimentNotes}
-CR Announcement: ${vault.crAnnouncement}
 Questions: ${JSON.stringify(questions)}
 Return strictly JSON object mapping index to answers: { "0": "val", "1": "val" }`;
 
@@ -271,6 +269,44 @@ Return strictly JSON object mapping index to answers: { "0": "val", "1": "val" }
       runDeterministicLocalFill(cards);
 
       statusText.innerText = '✨ Auto-Filled!';
+      
+      // Save transaction to local cache for Supabase sync
+      if (typeof chrome !== 'undefined' && chrome.storage && chrome.storage.local) {
+        chrome.storage.local.get(['formHistory'], (res) => {
+          const history = res.formHistory || [];
+          const newRecord = {
+            id: 'form-' + Date.now() + '-' + Math.random().toString(36).substring(2, 7),
+            formUrl: window.location.href,
+            formTitle: document.title || 'Google Form',
+            domain: window.location.hostname,
+            fieldsDetected: cards.length || 0,
+            fieldsFilled: cards.length || 0,
+            timeSavedSeconds: (cards.length || 0) * 15,
+            status: 'Completed',
+            createdAt: new Date().toISOString()
+          };
+          history.unshift(newRecord);
+          if (history.length > 50) history.pop();
+          chrome.storage.local.set({ formHistory: history });
+        });
+      } else {
+        const history = JSON.parse(localStorage.getItem('formHistory') || '[]');
+        const newRecord = {
+          id: 'form-' + Date.now() + '-' + Math.random().toString(36).substring(2, 7),
+          formUrl: window.location.href,
+          formTitle: document.title || 'Google Form',
+          domain: window.location.hostname,
+          fieldsDetected: cards.length || 0,
+          fieldsFilled: cards.length || 0,
+          timeSavedSeconds: (cards.length || 0) * 15,
+          status: 'Completed',
+          createdAt: new Date().toISOString()
+        };
+        history.unshift(newRecord);
+        if (history.length > 50) history.pop();
+        localStorage.setItem('formHistory', JSON.stringify(history));
+      }
+
       setTimeout(() => { statusText.innerText = 'Campus Copilot'; }, 3000);
     });
   });
@@ -311,5 +347,136 @@ Return strictly JSON object mapping index to answers: { "0": "val", "1": "val" }
       voiceBtn.classList.remove('cc-mic-active');
       document.getElementById('ccStatusText').innerText = 'Campus Copilot';
     };
+  }
+
+  // Draggable mechanics for the extension pill
+  const pillElement = document.getElementById('ccPill');
+  const rootElement = document.getElementById('campus-copilot-root');
+  
+  if (pillElement && rootElement) {
+    let isDragging = false;
+    let startX = 0;
+    let startY = 0;
+    let initialX = 0;
+    let initialY = 0;
+    const dragThreshold = 5; // px
+
+    // Load persisted coordinates (Extension-wide chrome.storage with localStorage fallback)
+    if (typeof chrome !== 'undefined' && chrome.storage && chrome.storage.local) {
+      chrome.storage.local.get(['ccPillX', 'ccPillY'], (res) => {
+        if (res.ccPillX && res.ccPillY) {
+          rootElement.style.left = res.ccPillX;
+          rootElement.style.top = res.ccPillY;
+          rootElement.style.right = 'auto';
+        }
+      });
+    } else {
+      const savedX = localStorage.getItem('ccPillX');
+      const savedY = localStorage.getItem('ccPillY');
+      if (savedX && savedY) {
+        rootElement.style.left = savedX;
+        rootElement.style.top = savedY;
+        rootElement.style.right = 'auto'; // override default right/top in CSS
+      }
+    }
+
+    pillElement.addEventListener('mousedown', dragStart);
+    pillElement.addEventListener('touchstart', dragStart, { passive: true });
+
+    function dragStart(e) {
+      // Allow dragging from main body / logo / status text, but not action buttons
+      if (e.target.closest('button')) return;
+
+      const clientX = e.type === 'touchstart' ? e.touches[0].clientX : e.clientX;
+      const clientY = e.type === 'touchstart' ? e.touches[0].clientY : e.clientY;
+
+      startX = clientX;
+      startY = clientY;
+
+      // Get current offset positions
+      const rect = rootElement.getBoundingClientRect();
+      initialX = rect.left;
+      initialY = rect.top;
+
+      isDragging = false;
+
+      if (e.type === 'mousedown') {
+        document.addEventListener('mousemove', dragMove);
+        document.addEventListener('mouseup', dragEnd);
+      } else {
+        document.addEventListener('touchmove', dragMove, { passive: false });
+        document.addEventListener('touchend', dragEnd);
+      }
+    }
+
+    function dragMove(e) {
+      const clientX = e.type === 'touchmove' ? e.touches[0].clientX : e.clientX;
+      const clientY = e.type === 'touchmove' ? e.touches[0].clientY : e.clientY;
+
+      const dx = clientX - startX;
+      const dy = clientY - startY;
+
+      if (!isDragging) {
+        if (Math.abs(dx) > dragThreshold || Math.abs(dy) > dragThreshold) {
+          isDragging = true;
+          pillElement.classList.add('cc-dragging');
+          rootElement.style.transition = 'none'; // disable transitions while dragging
+        }
+      }
+
+      if (isDragging) {
+        if (e.cancelable) e.preventDefault();
+
+        let newX = initialX + dx;
+        let newY = initialY + dy;
+
+        // Boundary constraints
+        const rect = rootElement.getBoundingClientRect();
+        const maxX = window.innerWidth - rect.width;
+        const maxY = window.innerHeight - rect.height;
+
+        newX = Math.max(0, Math.min(newX, maxX));
+        newY = Math.max(0, Math.min(newY, maxY));
+
+        rootElement.style.left = `${newX}px`;
+        rootElement.style.top = `${newY}px`;
+        rootElement.style.right = 'auto';
+      }
+    }
+
+    function dragEnd(e) {
+      if (e.type === 'mouseup') {
+        document.removeEventListener('mousemove', dragMove);
+        document.removeEventListener('mouseup', dragEnd);
+      } else {
+        document.removeEventListener('touchmove', dragMove);
+        document.removeEventListener('touchend', dragEnd);
+      }
+
+      if (isDragging) {
+        setTimeout(() => {
+          isDragging = false;
+        }, 50);
+        pillElement.classList.remove('cc-dragging');
+        rootElement.style.transition = 'left 0.2s ease, top 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease';
+        
+        // Persist position (Extension-wide chrome.storage with localStorage fallback)
+        const rect = rootElement.getBoundingClientRect();
+        if (typeof chrome !== 'undefined' && chrome.storage && chrome.storage.local) {
+          chrome.storage.local.set({ ccPillX: `${rect.left}px`, ccPillY: `${rect.top}px` });
+        } else {
+          localStorage.setItem('ccPillX', `${rect.left}px`);
+          localStorage.setItem('ccPillY', `${rect.top}px`);
+        }
+      }
+    }
+    
+    // Prevent default click events if dragged
+    pillElement.addEventListener('click', (e) => {
+      if (isDragging) {
+        e.preventDefault();
+        e.stopPropagation();
+      }
+    }, true);
   }
 })();

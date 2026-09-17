@@ -1,0 +1,24 @@
+{
+  "name": "campus-copilot",
+  "version": "1.0.0",
+  "description": "> **Autonomous AI Form Copilot for Campus & Student Workflows**   > Built as a Chrome Extension (Manifest V3) powered by Google Gemini AI.",
+  "main": "background.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/amitkonde933-afk/Campus-Copilot.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/amitkonde933-afk/Campus-Copilot/issues"
+  },
+  "homepage": "https://github.com/amitkonde933-afk/Campus-Copilot#readme",
+  "dependencies": {
+    "@supabase/supabase-js": "^2.112.4"
+  }
+}

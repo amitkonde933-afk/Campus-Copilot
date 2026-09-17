@@ -1,0 +1,1306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Campus Copilot - Streamline Your Campus Experience</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="chatbot.css">
+  <style>
+    :root {
+      --dusty-rose: #FAB1A0;
+      --mint-green: #2A9D8F;
+      --pale-cream: #FFFBF7;
+      --dark-grey: #4A4A4A;
+      --white: #FFFFFF;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: var(--pale-cream);
+      color: var(--dark-grey);
+      line-height: 1.6;
+    }
+
+    /* Header */
+    header {
+      background: rgba(250, 177, 160, 0.65); /* Dusty Rose glass tint */
+      backdrop-filter: blur(20px) saturate(180%);
+      -webkit-backdrop-filter: blur(20px) saturate(180%);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.35);
+      box-shadow: 0 4px 30px rgba(0, 0, 0, 0.04);
+      padding: 12px 40px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+
+    .logo {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 20px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      color: var(--dark-grey);
+      text-decoration: none;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 8px; /* Compact gap to support padding pills */
+      list-style: none;
+      align-items: center;
+    }
+
+    .nav-links a {
+      color: var(--dark-grey);
+      text-decoration: none;
+      font-weight: 500;
+      font-size: 14.5px;
+      padding: 8px 16px;
+      border-radius: 9999px;
+      transition: all 0.25s ease;
+      display: inline-block;
+    }
+
+    .nav-links a:hover {
+      background: rgba(255, 255, 255, 0.4);
+    }
+
+    .nav-links a.active {
+      background: rgba(255, 255, 255, 0.65);
+      font-weight: 700;
+      box-shadow: 0 2px 8px rgba(74, 74, 74, 0.04);
+    }
+
+    .auth-actions {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+    }
+
+    .login-link {
+      color: var(--dark-grey);
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 15px;
+    }
+
+    .login-link:hover {
+      text-decoration: underline;
+    }
+
+    .signup-btn {
+      background-color: var(--mint-green);
+      color: var(--white);
+      text-decoration: none;
+      padding: 10px 24px;
+      border-radius: 12px;
+      font-weight: 700;
+      font-size: 14px;
+      border: 1px solid rgba(74, 74, 74, 0.15);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .signup-btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 4px 10px rgba(129, 236, 236, 0.3);
+    }
+
+    /* Auth Toggles & States */
+    body.logged-in .pre-login-only { display: none !important; }
+    body.logged-in .post-login-only { display: flex !important; }
+    body:not(.logged-in) .post-login-only { display: none !important; }
+    body:not(.logged-in) .pre-login-only { display: flex !important; }
+
+    /* Profile Container & Avatar Dropdown */
+    .profile-container {
+      position: relative;
+    }
+
+    .profile-avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background-color: var(--mint-green);
+      border: 1.5px solid var(--dark-grey);
+      color: var(--dark-grey);
+      font-weight: 700;
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      user-select: none;
+      transition: transform 0.2s;
+    }
+
+    .profile-avatar:hover {
+      transform: scale(1.05);
+    }
+
+    .profile-dropdown {
+      position: absolute;
+      top: 50px;
+      right: 0;
+      background: var(--pale-cream);
+      border: 1.5px solid var(--dark-grey);
+      border-radius: 12px;
+      width: 160px;
+      box-shadow: 0 8px 24px rgba(74, 74, 74, 0.1);
+      display: none;
+      flex-direction: column;
+      overflow: hidden;
+      z-index: 101;
+    }
+
+    .profile-dropdown.active {
+      display: flex;
+    }
+
+    .profile-dropdown a {
+      padding: 12px 16px;
+      color: var(--dark-grey);
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 14px;
+      transition: background-color 0.2s;
+    }
+
+    .profile-dropdown a:hover {
+      background-color: rgba(74, 74, 74, 0.05);
+    }
+
+    /* Modal Backdrop Layer */
+
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: rgba(74, 74, 74, 0);
+      backdrop-filter: blur(0px);
+      -webkit-backdrop-filter: blur(0px);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+      transition: background-color 0.4s ease, backdrop-filter 0.4s ease, -webkit-backdrop-filter 0.4s ease;
+    }
+
+    .modal-overlay.active {
+      display: flex;
+      background-color: rgba(74, 74, 74, 0.4);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+    }
+
+    .modal-container {
+      background-color: var(--pale-cream);
+      border: 1.5px solid var(--dark-grey);
+      border-radius: 20px;
+      padding: 36px 30px;
+      width: 100%;
+      max-width: 400px;
+      box-shadow: 0 15px 35px rgba(74, 74, 74, 0.15);
+      position: relative;
+      opacity: 0;
+      transform: scale(0.92) translateY(20px);
+    }
+
+    .modal-overlay.active .modal-container {
+      animation: modalPopSpring 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+    }
+
+    @keyframes modalPopSpring {
+      from { opacity: 0; transform: scale(0.92) translateY(20px); }
+      to { opacity: 1; transform: scale(1) translateY(0); }
+    }
+
+    .modal-close {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      background: none;
+      border: none;
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--dark-grey);
+      cursor: pointer;
+      line-height: 1;
+    }
+
+    .modal-title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 24px;
+      font-weight: 700;
+      margin-bottom: 24px;
+      text-align: center;
+    }
+
+    .modal-form-group {
+      margin-bottom: 20px;
+    }
+
+    .modal-form-group label {
+      display: block;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--dark-grey);
+      margin-bottom: 8px;
+    }
+
+    .modal-form-group input {
+      width: 100%;
+      background: #FFFFFF;
+      border: 1px solid rgba(74, 74, 74, 0.2);
+      color: var(--dark-grey);
+      padding: 12px 16px;
+      border-radius: 12px;
+      font-size: 14px;
+      outline: none;
+      transition: all 0.3s ease;
+    }
+
+    .modal-form-group input:focus {
+      border-color: var(--mint-green);
+      box-shadow: 0 0 0 3px rgba(129, 236, 236, 0.25);
+    }
+
+    /* Slide-out Settings Sidebar */
+    .sidebar-overlay {
+      position: fixed;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      width: 100%;
+      max-width: 380px;
+      background-color: var(--pale-cream);
+      border-left: 1.5px solid var(--dark-grey);
+      box-shadow: -10px 0 30px rgba(74, 74, 74, 0.1);
+      z-index: 1000;
+      transform: translateX(100%);
+      transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+      padding: 40px 30px;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+      overflow-y: auto;
+    }
+
+    .sidebar-overlay.active {
+      transform: translateX(0);
+    }
+
+    .sidebar-close {
+      align-self: flex-start;
+      background: none;
+      border: none;
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--dark-grey);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .sidebar-title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 22px;
+      font-weight: 700;
+      border-bottom: 1px solid rgba(74, 74, 74, 0.1);
+      padding-bottom: 12px;
+    }
+
+    .sidebar-section {
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+
+    /* Zero-Gravity Modal Inner Elements Cascading Delays */
+    .modal-container > .modal-title {
+      opacity: 0;
+      transform: translateY(15px);
+      transition: transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.6s ease;
+    }
+    .modal-overlay.active .modal-container > .modal-title {
+      opacity: 1;
+      transform: translateY(0);
+      transition-delay: 100ms;
+    }
+
+    .modal-container form > .modal-form-group {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.6s ease;
+    }
+    .modal-overlay.active .modal-container form > .modal-form-group:nth-of-type(1) {
+      opacity: 1;
+      transform: translateY(0);
+      transition-delay: 180ms;
+    }
+    .modal-overlay.active .modal-container form > .modal-form-group:nth-of-type(2) {
+      opacity: 1;
+      transform: translateY(0);
+      transition-delay: 260ms;
+    }
+    .modal-overlay.active .modal-container form > .modal-form-group:nth-of-type(3) {
+      opacity: 1;
+      transform: translateY(0);
+      transition-delay: 340ms;
+    }
+
+    .modal-container form > button {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.6s ease;
+    }
+    .modal-overlay.active .modal-container form > button {
+      opacity: 1;
+      transform: translateY(0);
+      transition-delay: 420ms;
+    }
+
+    /* Zero-Gravity Settings Sidebar Inner Cascades */
+    .sidebar-overlay > .sidebar-title {
+      opacity: 0;
+      transform: translateY(15px);
+      transition: transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.6s ease;
+    }
+    .sidebar-overlay.active > .sidebar-title {
+      opacity: 1;
+      transform: translateY(0);
+      transition-delay: 150ms;
+    }
+
+    .sidebar-overlay > .sidebar-section {
+      opacity: 0;
+      transform: translateY(25px);
+      transition: transform 0.7s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.7s ease;
+    }
+    .sidebar-overlay.active > .sidebar-section:nth-of-type(1) {
+      opacity: 1;
+      transform: translateY(0);
+      transition-delay: 240ms;
+    }
+    .sidebar-overlay.active > .sidebar-section:nth-of-type(2) {
+      opacity: 1;
+      transform: translateY(0);
+      transition-delay: 330ms;
+    }
+    .sidebar-overlay.active > .sidebar-section:nth-of-type(3) {
+      opacity: 1;
+      transform: translateY(0);
+      transition-delay: 420ms;
+    }
+
+    /* Hero Section */
+    .hero-section {
+      max-width: 1200px;
+      margin: 60px auto;
+      padding: 0 40px;
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 60px;
+      align-items: center;
+    }
+
+    .hero-content {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .hero-title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 48px;
+      font-weight: 700;
+      line-height: 1.2;
+      margin-bottom: 24px;
+      color: var(--dark-grey);
+    }
+
+    .hero-desc {
+      font-size: 18px;
+      color: var(--dark-grey);
+      opacity: 0.9;
+      margin-bottom: 36px;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 16px;
+    }
+
+    .cta-btn {
+      background-color: var(--mint-green);
+      color: var(--white);
+      text-decoration: none;
+      padding: 14px 32px;
+      border-radius: 12px;
+      font-weight: 700;
+      font-size: 16px;
+      border: 1px solid rgba(74, 74, 74, 0.15);
+      transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+    }
+
+    .cta-btn:hover {
+      transform: translateY(-8px) scale(1.02);
+      box-shadow: 0 16px 36px rgba(42, 157, 143, 0.35);
+    }
+
+    .secondary-btn {
+      background-color: transparent;
+      color: var(--dark-grey);
+      text-decoration: none;
+      padding: 14px 32px;
+      border-radius: 12px;
+      font-weight: 600;
+      font-size: 16px;
+      border: 1px solid var(--dark-grey);
+      transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+    }
+
+    .secondary-btn:hover {
+      background-color: rgba(74, 74, 74, 0.03);
+      transform: translateY(-8px) scale(1.02);
+      box-shadow: 0 16px 36px rgba(74, 74, 74, 0.08);
+    }
+
+    /* SVG Illustration Styling */
+    .hero-visual {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+    }
+
+    .hero-svg {
+      width: 100%;
+      height: auto;
+      max-width: 460px;
+    }
+
+    .floating-overlay {
+      animation: floatOverlay 4s ease-in-out infinite;
+    }
+
+    .float-delay-1 { animation-delay: 0.5s; }
+    .float-delay-2 { animation-delay: 1.2s; }
+    .float-delay-3 { animation-delay: 2s; }
+
+    @keyframes floatOverlay {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-8px); }
+    }
+
+    /* Feature Cards */
+    .features-section {
+      background-color: var(--white);
+      border-top: 1px solid rgba(74, 74, 74, 0.05);
+      border-bottom: 1px solid rgba(74, 74, 74, 0.05);
+      padding: 80px 40px;
+    }
+
+    .features-container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .section-title {
+      font-family: 'Space Grotesk', sans-serif;
+      text-align: center;
+      font-size: 32px;
+      margin-bottom: 48px;
+    }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 32px;
+    }
+
+    .feature-card {
+      background-color: var(--pale-cream);
+      border: 1px solid rgba(74, 74, 74, 0.1);
+      border-radius: 20px;
+      padding: 32px;
+      box-shadow: 0 4px 15px rgba(74, 74, 74, 0.02);
+      
+      /* Motion: Staggered Fade-and-slide Entrance */
+      opacity: 0;
+      transform: translateY(50px);
+      transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+    }
+
+    .feature-card.animated-in {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .feature-card.animated-in:nth-child(1) { transition-delay: 0ms; }
+    .feature-card.animated-in:nth-child(2) { transition-delay: 100ms; }
+    .feature-card.animated-in:nth-child(3) { transition-delay: 200ms; }
+
+    .feature-card:hover {
+      transform: translateY(-8px) scale(1.02);
+      box-shadow: 0 16px 36px rgba(74, 74, 74, 0.1);
+      border-color: var(--dusty-rose);
+    }
+
+    /* Icon micro-interactions (SVG drawing outline effect) */
+    .feature-card:hover .card-icon svg path,
+    .feature-card:hover .card-icon svg rect,
+    .feature-card:hover .card-icon svg circle,
+    .feature-card:hover .card-icon svg polyline,
+    .feature-card:hover .card-icon svg line {
+      stroke: var(--mint-green);
+      stroke-dasharray: 100;
+      stroke-dashoffset: 100;
+      animation: drawOutline 1s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+    }
+
+    @keyframes drawOutline {
+      to {
+        stroke-dashoffset: 0;
+      }
+    }
+
+    .card-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 12px;
+      background-color: var(--white);
+      border: 1px solid rgba(74, 74, 74, 0.1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 20px;
+    }
+
+    .card-icon svg {
+      width: 24px;
+      height: 24px;
+      stroke: var(--dark-grey);
+      fill: none;
+      stroke-width: 2;
+    }
+
+    .card-title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 20px;
+      font-weight: 700;
+      margin-bottom: 12px;
+      color: var(--dark-grey);
+    }
+
+    .card-desc {
+      font-size: 14px;
+      color: var(--dark-grey);
+      opacity: 0.85;
+      margin-bottom: 24px;
+    }
+
+    .card-link {
+      color: var(--dark-grey);
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 14px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      border-bottom: 2px solid var(--mint-green);
+      padding-bottom: 2px;
+      transition: color 0.2s;
+    }
+
+    .card-link:hover {
+      color: var(--accent-teal);
+    }
+
+    /* Footer */
+    footer {
+      background-color: var(--pale-cream);
+      padding: 60px 40px 40px;
+    }
+
+    .footer-container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 1fr 1.5fr 1fr;
+      gap: 48px;
+      margin-bottom: 48px;
+    }
+
+    .footer-brand h3 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 18px;
+      margin-bottom: 12px;
+    }
+
+    .footer-brand p {
+      font-size: 13px;
+      opacity: 0.8;
+      max-width: 240px;
+    }
+
+    .students-collab-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+    }
+
+    .student-pic {
+      width: 100%;
+      aspect-ratio: 1;
+      border-radius: 8px;
+      background-color: var(--dusty-rose);
+      opacity: 0.65;
+      border: 1px solid rgba(74, 74, 74, 0.1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+    }
+
+    .student-pic:nth-child(2n) { background-color: var(--mint-green); }
+    .student-pic:nth-child(3n) { background-color: #ffeaa7; }
+
+    .palette-swatch-container {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .swatch-title {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+
+    .swatch-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .swatch-color {
+      width: 28px;
+      height: 28px;
+      border-radius: 6px;
+      border: 1px solid rgba(74, 74, 74, 0.15);
+    }
+
+    .swatch-label {
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .footer-bottom {
+      border-top: 1px solid rgba(74, 74, 74, 0.1);
+      padding-top: 24px;
+      display: flex;
+      justify-content: space-between;
+      font-size: 13px;
+      opacity: 0.7;
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 24px;
+    }
+
+    .footer-links a {
+      color: var(--dark-grey);
+      text-decoration: none;
+    }
+
+    .footer-links a:hover {
+      text-decoration: underline;
+    }
+
+    /* Cinematic Scroll Reveal Animations */
+    .scroll-reveal {
+      opacity: 0;
+      transform: translateY(50px);
+      transition: opacity 0.8s cubic-bezier(0.25, 0.8, 0.25, 1), transform 0.8s cubic-bezier(0.25, 0.8, 0.25, 1);
+    }
+    .scroll-reveal.reveal-active {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Staggered row children reveal */
+    .stagger-container.reveal-active .stagger-item {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .stagger-item {
+      opacity: 0;
+      transform: translateY(50px);
+      transition: opacity 0.8s cubic-bezier(0.25, 0.8, 0.25, 1), transform 0.8s cubic-bezier(0.25, 0.8, 0.25, 1);
+    }
+    .stagger-container.reveal-active .stagger-item:nth-child(1) { transition-delay: 0ms; }
+    .stagger-container.reveal-active .stagger-item:nth-child(2) { transition-delay: 100ms; }
+    .stagger-container.reveal-active .stagger-item:nth-child(3) { transition-delay: 200ms; }
+
+    /* Impact Metrics Section */
+    .metrics-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 32px;
+      margin: 40px 0;
+      width: 100%;
+    }
+    .metric-card {
+      background-color: var(--pale-cream);
+      border: 1.5px solid var(--dark-grey);
+      border-radius: 16px;
+      padding: 32px 24px;
+      text-align: center;
+      box-shadow: 0 4px 12px rgba(74, 74, 74, 0.02);
+      transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+    }
+    .metric-card:hover {
+      transform: translateY(-8px) scale(1.02);
+      box-shadow: 0 16px 36px rgba(74, 74, 74, 0.1);
+      border-color: var(--mint-green);
+    }
+    .metric-val {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 36px;
+      font-weight: 700;
+      color: var(--dark-grey);
+      margin-bottom: 6px;
+    }
+    .metric-label {
+      font-size: 13px;
+      color: var(--text-muted);
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    /* Student Testimonial Card */
+    .testimonial-card {
+      background-color: var(--dusty-rose);
+      border: 1.5px solid var(--dark-grey);
+      border-radius: 24px;
+      padding: 40px;
+      box-shadow: 0 4px 15px rgba(74, 74, 74, 0.02);
+      max-width: 800px;
+      margin: 20px auto 40px;
+      text-align: left;
+      transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+    }
+    .testimonial-card:hover {
+      transform: translateY(-8px) scale(1.02);
+      box-shadow: 0 16px 36px rgba(74, 74, 74, 0.1);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Navigation Header -->
+  <header>
+    <a href="#" class="logo" style="display: flex; align-items: center; gap: 10px; text-decoration: none;">
+      <img src="icons/campus_copilot_icon.svg" alt="Campus Copilot Icon" style="height: 32px; width: 32px; object-fit: contain;">
+      <span style="font-family: 'Space Grotesk', sans-serif; font-size: 20px; font-weight: 700; color: var(--dark-grey); letter-spacing: 0.5px;">CAMPUS COPILOT</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="dashboard.html">Dashboard</a></li>
+      <li><a href="#features" class="active">Features</a></li>
+      <li><a href="dashboard.html?tab=tab-settings-panel">Settings</a></li>
+      <li><a href="#about">About</a></li>
+    </ul>
+    <div class="auth-actions">
+      <!-- Pre-Login UI -->
+      <a href="#" class="login-link pre-login-only" id="loginTrigger">Log In</a>
+      <a href="#" class="signup-btn pre-login-only" id="signupTrigger">Sign up</a>
+      
+      <!-- Post-Login UI -->
+      <div class="profile-container post-login-only">
+        <div class="profile-avatar" id="profileAvatar">CD</div>
+        <div class="profile-dropdown" id="profileDropdown">
+          <a href="#" id="settingsTrigger">Settings</a>
+          <a href="#" id="logoutTrigger">Log Out</a>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="hero-section">
+    <div class="hero-content">
+      <h1 class="hero-title">Your Academic Copilot: Streamline Your Campus Experience.</h1>
+      <p class="hero-desc">Autofill forms, manage deadlines, and vault your student data securely.</p>
+      <div class="hero-actions">
+        <a href="dashboard.html" class="cta-btn">Get Started Now</a>
+        <a href="#features" class="secondary-btn">Explore Features</a>
+      </div>
+    </div>
+    
+    <!-- Sophisticated Desk/Overlay Graphic -->
+    <div class="hero-visual">
+      <svg class="hero-svg" viewBox="0 0 500 400">
+        <!-- Laptop & Desk Items Grouped for Parallax -->
+        <g class="parallax-desk" style="transition: transform 0.2s ease-out;">
+          <!-- Minimalist desk line -->
+          <line x1="50" y1="320" x2="450" y2="320" stroke="#4A4A4A" stroke-width="3" stroke-linecap="round"/>
+          <!-- Laptop Base -->
+          <path d="M160 305 l180 0 l15 15 l-210 0 z" fill="#d2d2d2" stroke="#4A4A4A" stroke-width="2"/>
+          <!-- Laptop Screen -->
+          <rect x="180" y="195" width="140" height="110" rx="4" ry="4" fill="#FFFBF7" stroke="#4A4A4A" stroke-width="2"/>
+          <rect x="188" y="203" width="124" height="85" fill="#FAB1A0" opacity="0.3"/>
+          <circle cx="250" cy="200" r="2" fill="#4A4A4A"/>
+          
+          <!-- Student Desk Stylized Items -->
+          <!-- Desk Lamp -->
+          <path d="M100 320 L100 240 L130 220" fill="none" stroke="#4A4A4A" stroke-width="2" stroke-linecap="round"/>
+          <path d="M125 215 l10 10 l-15 10 z" fill="#2A9D8F" stroke="#4A4A4A" stroke-width="2"/>
+          
+          <!-- Coffee Mug -->
+          <rect x="360" y="295" width="22" height="25" rx="3" fill="#2A9D8F" stroke="#4A4A4A" stroke-width="2"/>
+          <path d="M382 300 q5 0 5 6 q0 6 -5 6" fill="none" stroke="#4A4A4A" stroke-width="2"/>
+
+          <!-- Notebook -->
+          <rect x="110" y="310" width="30" height="10" rx="2" fill="#FFFBF7" stroke="#4A4A4A" stroke-width="2"/>
+        </g>
+
+        <!-- FLOATING OVERLAYS -->
+        <!-- Floating Document Icon (Top Left) -->
+        <g class="floating-overlay float-delay-1 parallax-doc" style="transition: transform 0.2s ease-out;">
+          <circle cx="120" cy="130" r="30" fill="#FFFBF7" stroke="#FAB1A0" stroke-width="2" filter="drop-shadow(0px 4px 6px rgba(74,74,74,0.15))"/>
+          <!-- Document Path -->
+          <rect x="108" y="116" width="24" height="28" rx="2" fill="none" stroke="#4A4A4A" stroke-width="2"/>
+          <line x1="113" y1="122" x2="127" y2="122" stroke="#4A4A4A" stroke-width="2"/>
+          <line x1="113" y1="128" x2="127" y2="128" stroke="#4A4A4A" stroke-width="2"/>
+          <path d="M120 134 l3 3 l5 -5" fill="none" stroke="#2A9D8F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </g>
+
+        <!-- Floating Calendar Icon (Top Right) -->
+        <g class="floating-overlay float-delay-2 parallax-cal" style="transition: transform 0.2s ease-out;">
+          <circle cx="370" cy="120" r="30" fill="#FFFBF7" stroke="#2A9D8F" stroke-width="2" filter="drop-shadow(0px 4px 6px rgba(74,74,74,0.15))"/>
+          <!-- Calendar Path -->
+          <rect x="358" y="106" width="24" height="26" rx="2" fill="none" stroke="#4A4A4A" stroke-width="2"/>
+          <line x1="358" y1="114" x2="382" y2="114" stroke="#4A4A4A" stroke-width="2"/>
+          <line x1="363" y1="102" x2="363" y2="108" stroke="#4A4A4A" stroke-width="2"/>
+          <line x1="377" y1="102" x2="377" y2="108" stroke="#4A4A4A" stroke-width="2"/>
+          <circle cx="365" cy="122" r="1.5" fill="#4A4A4A"/>
+          <circle cx="375" cy="122" r="1.5" fill="#4A4A4A"/>
+          <circle cx="370" cy="122" r="1.5" fill="#4A4A4A"/>
+        </g>
+
+        <!-- Floating Safe/Vault Icon (Bottom Left) -->
+        <g class="floating-overlay float-delay-3">
+          <circle cx="130" cy="220" r="28" fill="#FFFBF7" stroke="#2A9D8F" stroke-width="2" filter="drop-shadow(0px 4px 6px rgba(74,74,74,0.15))"/>
+          <!-- Vault Path -->
+          <rect x="119" y="209" width="22" height="22" rx="3" fill="none" stroke="#4A4A4A" stroke-width="2"/>
+          <circle cx="130" cy="220" r="5" fill="none" stroke="#4A4A4A" stroke-width="2"/>
+          <line x1="130" y1="211" x2="130" y2="215" stroke="#4A4A4A" stroke-width="2"/>
+          <line x1="130" y1="225" x2="130" y2="229" stroke="#4A4A4A" stroke-width="2"/>
+        </g>
+
+        <!-- Floating Notepad & Stylus (Bottom Right) -->
+        <g class="floating-overlay float-delay-1 parallax-note" style="transition: transform 0.2s ease-out;">
+          <circle cx="360" cy="210" r="28" fill="#FFFBF7" stroke="#FAB1A0" stroke-width="2" filter="drop-shadow(0px 4px 6px rgba(74,74,74,0.15))"/>
+          <!-- Notepad Path -->
+          <rect x="349" y="199" width="22" height="22" rx="2" fill="none" stroke="#4A4A4A" stroke-width="2"/>
+          <line x1="354" y1="205" x2="366" y2="205" stroke="#4A4A4A" stroke-width="1.5"/>
+          <line x1="354" y1="210" x2="366" y2="210" stroke="#4A4A4A" stroke-width="1.5"/>
+          <line x1="354" y1="215" x2="362" y2="215" stroke="#4A4A4A" stroke-width="1.5"/>
+        </g>
+      </svg>
+    </div>
+  </section>
+
+  <!-- Feature Cards Grid Section -->
+  <section class="features-section" id="features">
+    <div class="features-container">
+      <h2 class="section-title">Designed for Seamless Student Success</h2>
+      <div class="grid-3">
+        
+        <!-- Card 1 -->
+        <div class="feature-card">
+          <div class="card-icon">
+            <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+          </div>
+          <h3 class="card-title">Form Auto-Fill</h3>
+          <p class="card-desc">No more manual entry. Scrapes local campus inputs, parses prompts and submits details inside Google Forms in seconds.</p>
+          <a href="dashboard.html" class="card-link">Get Started &rarr;</a>
+        </div>
+
+        <!-- Card 2 -->
+        <div class="feature-card">
+          <div class="card-icon">
+            <svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+          </div>
+          <h3 class="card-title">Secure Data Vault</h3>
+          <p class="card-desc">Your personal credentials, GPA records, and bio profiles are kept securely on local browser storage. Completely serverless.</p>
+          <a href="dashboard.html" class="card-link">Manage Profile &rarr;</a>
+        </div>
+
+        <!-- Card 3 -->
+        <div class="feature-card">
+          <div class="card-icon">
+            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          </div>
+          <h3 class="card-title">Campus Deadlines</h3>
+          <p class="card-desc">Review your scheduled classes, lab queues, and mock registration events. Synchronize details inside your local calendar flow.</p>
+          <a href="dashboard.html" class="card-link">View Calendar &rarr;</a>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-container">
+      <div class="footer-grid">
+        
+        <!-- Brand Info -->
+        <div class="footer-brand">
+          <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 12px;">
+            <img src="icons/campus_copilot_icon.svg" alt="Icon" style="height: 28px; width: 28px; object-fit: contain;">
+            <h3 style="margin: 0; font-family: 'Space Grotesk', sans-serif; font-size: 18px; font-weight: 700;">CAMPUS COPILOT</h3>
+          </div>
+          <p>The academic form companion enabling high-efficiency data integration for students.</p>
+        </div>
+
+        <!-- Impact Metrics Section (3-Column Grid) -->
+        <div class="metrics-grid stagger-container scroll-reveal" id="metricsSection" style="grid-column: span 2;">
+          <div class="metric-card stagger-item">
+            <h4 class="metric-val">10k+</h4>
+            <p class="metric-label">Forms Auto-Filled</p>
+          </div>
+          <div class="metric-card stagger-item">
+            <h4 class="metric-val">50+</h4>
+            <p class="metric-label">Campuses Supported</p>
+          </div>
+          <div class="metric-card stagger-item">
+            <h4 class="metric-val">100%</h4>
+            <p class="metric-label">Data Secured</p>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Testimonial Section placed full-width under brand/metrics -->
+      <div class="testimonial-card scroll-reveal" style="margin-bottom: 40px;">
+        <p style="font-size: 16px; font-weight: 500; font-style: italic; line-height: 1.6; margin-bottom: 16px; color: var(--dark-grey);">
+          "Campus Copilot completely streamlined my course registration form queues! What used to take hours of manual typing and page reloading is now fully automated and synced with my local browser vault. Highly recommended for any student!"
+        </p>
+        <div style="display: flex; align-items: center; gap: 12px;">
+          <div style="width: 36px; height: 36px; border-radius: 50%; background-color: var(--white); border: 1.5px solid var(--dark-grey); display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 13px; color: var(--dark-grey);">AS</div>
+          <div>
+            <p style="font-size: 14px; font-weight: 700; color: var(--dark-grey);">Alex Smith</p>
+            <p style="font-size: 12px; opacity: 0.8; color: var(--dark-grey);">Sophomore, Boston University</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <p>&copy; 2026 Campus Copilot. Professional Academic Utility.</p>
+        <div class="footer-links">
+          <a href="#">Privacy Policy</a>
+          <a href="#">Terms of Service</a>
+          <a href="#">Contact</a>
+        </div>
+      </div>
+  <!-- Log In Modal -->
+  <div class="modal-overlay" id="loginModal">
+    <div class="modal-container">
+      <button class="modal-close" id="closeLoginModal">&times;</button>
+      <h3 class="modal-title">Log In to Copilot</h3>
+      <form id="loginModalForm">
+        <div class="modal-form-group">
+          <label>Email Address</label>
+          <input type="email" placeholder="student@university.edu" required>
+        </div>
+        <div class="modal-form-group">
+          <label>Password</label>
+          <input type="password" placeholder="••••••••" required>
+        </div>
+        <button type="submit" class="btn" style="background-color: var(--mint-green); color: var(--white); font-weight: 700; width: 100%; padding: 12px; border: 1px solid rgba(74,74,74,0.15); border-radius: 12px; cursor: pointer; box-shadow: 0 4px 10px rgba(129,236,236,0.35);">Log In</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Sign Up Modal -->
+  <div class="modal-overlay" id="signupModal">
+    <div class="modal-container">
+      <button class="modal-close" id="closeSignupModal">&times;</button>
+      <h3 class="modal-title">Create an Account</h3>
+      <form id="signupModalForm">
+        <div class="modal-form-group">
+          <label>Full Name</label>
+          <input type="text" id="signupName" placeholder="Debojyoti Dhar" required>
+        </div>
+        <div class="modal-form-group">
+          <label>Email Address</label>
+          <input type="email" placeholder="student@university.edu" required>
+        </div>
+        <div class="modal-form-group">
+          <label>Password</label>
+          <input type="password" placeholder="••••••••" required>
+        </div>
+        <button type="submit" class="btn" style="background-color: var(--mint-green); color: var(--white); font-weight: 700; width: 100%; padding: 12px; border: 1px solid rgba(74,74,74,0.15); border-radius: 12px; cursor: pointer; box-shadow: 0 4px 10px rgba(129, 236, 236, 0.35);">Sign Up</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Slide-out Settings Sidebar -->
+  <div class="sidebar-overlay" id="settingsSidebar">
+    <button class="sidebar-close" id="closeSettingsSidebar">&larr; Back to Home</button>
+    <h3 class="sidebar-title">Settings Portal</h3>
+    
+    <div class="sidebar-section">
+      <div class="modal-form-group">
+        <label>Account Profile</label>
+        <input type="text" id="settingsProfileName" value="Debojyoti Dhar" style="margin-bottom: 12px;">
+        <input type="email" value="debojyoti@university.edu">
+      </div>
+      <button class="btn" style="background-color: var(--mint-green); color: var(--white); font-weight: 700; width: 100%; padding: 12px; border: 1px solid rgba(74,74,74,0.15); border-radius: 12px; cursor: pointer;">Update Profile</button>
+    </div>
+
+    <div class="sidebar-section" style="border-top: 1px solid rgba(74,74,74,0.1); padding-top: 20px;">
+      <div class="modal-form-group">
+        <label>Change Password</label>
+        <input type="password" placeholder="Current Password" style="margin-bottom: 12px;">
+        <input type="password" placeholder="New Password">
+      </div>
+      <button class="btn" style="background-color: var(--mint-green); color: var(--white); font-weight: 700; width: 100%; padding: 12px; border: 1px solid rgba(74,74,74,0.15); border-radius: 12px; cursor: pointer;">Change Password</button>
+    </div>
+
+    <div class="sidebar-section" style="border-top: 1px solid rgba(74,74,74,0.1); padding-top: 20px;">
+      <label>Notification Preferences</label>
+      <div style="display: flex; flex-direction: column; gap: 12px;">
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <input type="checkbox" checked style="width: auto;">
+          <span style="font-size: 13.5px;">Form Auto-Fill Alerts</span>
+        </div>
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <input type="checkbox" checked style="width: auto;">
+          <span style="font-size: 13.5px;">Deadline Reminders</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Elements
+    const body = document.body;
+    const loginTrigger = document.getElementById('loginTrigger');
+    const signupTrigger = document.getElementById('signupTrigger');
+    const loginModal = document.getElementById('loginModal');
+    const signupModal = document.getElementById('signupModal');
+    const closeLoginModal = document.getElementById('closeLoginModal');
+    const closeSignupModal = document.getElementById('closeSignupModal');
+    
+    const loginModalForm = document.getElementById('loginModalForm');
+    const signupModalForm = document.getElementById('signupModalForm');
+    
+    const profileAvatar = document.getElementById('profileAvatar');
+    const profileDropdown = document.getElementById('profileDropdown');
+    const settingsTrigger = document.getElementById('settingsTrigger');
+    const logoutTrigger = document.getElementById('logoutTrigger');
+    
+    const settingsSidebar = document.getElementById('settingsSidebar');
+    const closeSettingsSidebar = document.getElementById('closeSettingsSidebar');
+    const signupNameInput = document.getElementById('signupName');
+    const settingsProfileName = document.getElementById('settingsProfileName');
+
+    // Helper functions to open/close modals
+    const showModal = (modal) => modal.classList.add('active');
+    const hideModal = (modal) => modal.classList.remove('active');
+
+    // Click triggers
+    loginTrigger.addEventListener('click', (e) => { e.preventDefault(); window.location.href = 'agent/login-panel.html'; });
+    signupTrigger.addEventListener('click', (e) => { e.preventDefault(); window.location.href = 'agent/login-panel.html'; });
+    closeLoginModal.addEventListener('click', () => hideModal(loginModal));
+    closeSignupModal.addEventListener('click', () => hideModal(signupModal));
+
+    // Handle Form Submissions
+    loginModalForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      hideModal(loginModal);
+      loginUser('Student');
+    });
+
+    signupModalForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const userName = signupNameInput.value.trim() || 'Student';
+      hideModal(signupModal);
+      loginUser(userName);
+    });
+
+    // Login logic
+    function loginUser(name) {
+      body.classList.add('logged-in');
+      const initials = name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase();
+      profileAvatar.textContent = initials || 'ST';
+      if (settingsProfileName) settingsProfileName.value = name;
+      localStorage.setItem('landingLoggedInName', name);
+    }
+
+    // Toggle Dropdown
+    profileAvatar.addEventListener('click', (e) => {
+      e.stopPropagation();
+      profileDropdown.classList.toggle('active');
+    });
+
+    // Close Dropdown on outside click
+    window.addEventListener('click', () => {
+      profileDropdown.classList.remove('active');
+    });
+
+    // Settings trigger
+    settingsTrigger.addEventListener('click', (e) => {
+      e.preventDefault();
+      settingsSidebar.classList.add('active');
+    });
+
+    closeSettingsSidebar.addEventListener('click', () => {
+      settingsSidebar.classList.remove('active');
+    });
+
+    // Logout
+    logoutTrigger.addEventListener('click', (e) => {
+      e.preventDefault();
+      body.classList.remove('logged-in');
+      if (typeof chrome !== 'undefined' && chrome.storage && chrome.storage.local) {
+        chrome.storage.local.remove(['isLoggedIn', 'ccSession'], () => {
+          window.location.reload();
+        });
+      } else {
+        localStorage.removeItem('isLoggedIn');
+        localStorage.removeItem('ccSession');
+        window.location.reload();
+      }
+    });
+
+    // Check existing Google session on page load
+    const checkSession = () => {
+      const handleSession = (session) => {
+        if (session) {
+          loginUser(session.name);
+        } else {
+          // If not logged in, intercept dashboard redirects
+          document.querySelectorAll('a[href="dashboard.html"], a[href="dashboard.html?tab=tab-settings-panel"], .cta-btn, .card-link').forEach(link => {
+            link.addEventListener('click', (e) => {
+              const href = link.getAttribute('href');
+              if (href && (href.includes('dashboard.html') || link.classList.contains('cta-btn') || link.classList.contains('card-link'))) {
+                e.preventDefault();
+                window.location.href = 'agent/login-panel.html';
+              }
+            });
+          });
+        }
+      };
+
+      if (typeof chrome !== 'undefined' && chrome.storage && chrome.storage.local) {
+        chrome.storage.local.get(['ccSession'], (result) => {
+          handleSession(result.ccSession);
+        });
+      } else {
+        const sessionStr = localStorage.getItem('ccSession');
+        handleSession(sessionStr ? JSON.parse(sessionStr) : null);
+      }
+    };
+    checkSession();
+
+    // Motion: Interactive Hero Parallax Mouse Tracking
+    const heroVisual = document.querySelector('.hero-visual');
+    const deskLayer = document.querySelector('.parallax-desk');
+    const docLayer = document.querySelector('.parallax-doc');
+    const calLayer = document.querySelector('.parallax-cal');
+    const vaultLayer = document.querySelector('.parallax-vault');
+    const noteLayer = document.querySelector('.parallax-note');
+
+    if (heroVisual) {
+      heroVisual.addEventListener('mousemove', (e) => {
+        const rect = heroVisual.getBoundingClientRect();
+        const x = e.clientX - rect.left - rect.width / 2;
+        const y = e.clientY - rect.top - rect.height / 2;
+
+        if (deskLayer) deskLayer.style.transform = `translate(${x * -0.04}px, ${y * -0.04}px)`;
+        if (docLayer) docLayer.style.transform = `translate(${x * 0.1}px, ${y * 0.1}px) scale(1.03)`;
+        if (calLayer) calLayer.style.transform = `translate(${x * 0.15}px, ${y * 0.08}px) scale(1.05)`;
+        if (vaultLayer) vaultLayer.style.transform = `translate(${x * -0.12}px, ${y * 0.14}px) scale(0.96)`;
+        if (noteLayer) noteLayer.style.transform = `translate(${x * 0.07}px, ${y * -0.1}px) scale(1.04)`;
+      });
+
+      heroVisual.addEventListener('mouseleave', () => {
+        const resetTransition = "transform 0.8s cubic-bezier(0.25, 1, 0.2, 1)";
+        [deskLayer, docLayer, calLayer, vaultLayer, noteLayer].forEach(layer => {
+          if (layer) {
+            layer.style.transition = resetTransition;
+            layer.style.transform = '';
+            setTimeout(() => { layer.style.transition = 'transform 0.2s ease-out'; }, 800);
+          }
+        });
+      });
+    }
+
+    // Motion: Scroll Triggered Staggered Feature Cards Entrance
+    const featureCards = document.querySelectorAll('.feature-card');
+    const cardObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('animated-in');
+          cardObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.15 });
+
+    featureCards.forEach(card => cardObserver.observe(card));
+
+    // Cinematic Scroll Reveal & Stagger Observer
+    const scrollRevealElements = document.querySelectorAll('.scroll-reveal, .stagger-container');
+    const revealObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('reveal-active');
+          revealObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.1 });
+
+    scrollRevealElements.forEach(el => revealObserver.observe(el));
+
+    // Toggle active classes on nav links
+    const navLinks = document.querySelectorAll('.nav-links a');
+    navLinks.forEach(link => {
+      link.addEventListener('click', () => {
+        navLinks.forEach(item => item.classList.remove('active'));
+        link.classList.add('active');
+      });
+    });
+  </script>
+  <script src="chatbot.js" defer></script>
+</body>
+</html>

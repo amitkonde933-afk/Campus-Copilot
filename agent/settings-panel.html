@@ -1,0 +1,31 @@
+<div class="card" style="margin-bottom: 24px; animation: loadUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;">
+  <div class="card-header">
+    <div class="card-title">⚙️ Preference Panel</div>
+  </div>
+  <p style="font-size: 14px; color: var(--text-muted); margin-bottom: 24px;">
+    Customize your AI Copilot execution environment, autofill limits, and session credentials.
+  </p>
+
+  <div class="form-group">
+    <label>Automation Features</label>
+    <div style="display: flex; flex-direction: column; gap: 14px; margin-top: 8px;">
+      <div style="display: flex; align-items: center; gap: 12px; cursor: pointer;">
+        <input type="checkbox" id="toggleAiFill" style="width: auto; cursor: pointer;">
+        <span style="font-size: 14px; font-weight: 500;">Enable Autocomplete Assistant (AI recommendation fallback)</span>
+      </div>
+      <div style="display: flex; align-items: center; gap: 12px; cursor: pointer;">
+        <input type="checkbox" id="autoClearForm" style="width: auto; cursor: pointer;">
+        <span style="font-size: 14px; font-weight: 500;">Auto-clear vault backup buffers on successful import</span>
+      </div>
+    </div>
+  </div>
+
+  <div style="margin-top: 32px; padding-top: 20px; border-top: 1px solid rgba(74, 74, 74, 0.1); display: flex; justify-content: space-between; align-items: center; gap: 12px;">
+    <button id="logoutBtn" class="btn btn-secondary" style="border-color: #f43f5e; color: #f43f5e;">
+      🔒 Log Out of Vault
+    </button>
+    <button id="saveSettingsBtn" class="btn btn-primary">
+      Save System Settings
+    </button>
+  </div>
+</div>

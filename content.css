@@ -1,40 +1,96 @@
 #campus-copilot-root {
   position: fixed;
-  top: 18px;
-  right: 18px;
+  top: 24px;
+  right: 24px;
   z-index: 2147483647;
-  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   user-select: none;
+  touch-action: none;
+  animation: cc-float-in 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  transition: left 0.2s ease, top 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
 }
+
+@keyframes cc-float-in {
+  from {
+    opacity: 0;
+    transform: translateY(-20px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
 .cc-pill {
-  background: rgba(9, 13, 22, 0.9);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  backdrop-filter: blur(14px);
-  color: #fff;
-  padding: 6px 10px;
+  background: rgba(255, 251, 247, 0.85);
+  border: 1px solid rgba(74, 74, 74, 0.15);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  color: #4A4A4A;
+  padding: 8px 12px;
   border-radius: 999px;
   display: flex;
   align-items: center;
-  gap: 8px;
-  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.5);
-  transition: all 0.2s;
+  gap: 10px;
+  box-shadow: 0 8px 24px rgba(74, 74, 74, 0.08);
+  transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+  cursor: grab;
 }
-.cc-pill:hover { border-color: #38bdf8; box-shadow: 0 0 20px rgba(56, 189, 248, 0.3); }
+
+.cc-pill:active {
+  cursor: grabbing;
+}
+
+.cc-pill.cc-dragging {
+  cursor: grabbing;
+  transform: scale(1.03);
+  box-shadow: 0 20px 45px rgba(74, 74, 74, 0.18);
+  border-color: #2A9D8F;
+}
+
+.cc-pill:hover { 
+  border-color: #FAB1A0; /* Dusty Rose Pink */
+  box-shadow: 0 10px 28px rgba(74, 74, 74, 0.12);
+  transform: translateY(-2px) scale(1.01);
+}
+
 .cc-logo {
-  width: 28px;
-  height: 28px;
-  background: linear-gradient(135deg, #38bdf8, #818cf8);
+  width: 30px;
+  height: 30px;
+  background: linear-gradient(135deg, #FFFBF7, #2A9D8F);
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
+  border: 1px solid #4A4A4A;
+  animation: cc-logo-pulse 3s ease-in-out infinite;
 }
-.cc-logo svg { width: 16px; height: 16px; fill: none; stroke: #fff; stroke-width: 2.2; }
+
+@keyframes cc-logo-pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+
+.cc-logo svg { 
+  width: 17px; 
+  height: 17px; 
+  fill: none; 
+  stroke: #4A4A4A; 
+  stroke-width: 2.2; 
+}
+
+#ccStatusText {
+  color: #4A4A4A;
+  letter-spacing: 0.2px;
+  font-size: 13px;
+  font-weight: 700;
+}
+
 .cc-action-btn {
-  background: linear-gradient(135deg, #2563eb, #38bdf8);
-  color: white;
-  border: none;
-  padding: 6px 12px;
+  background: #2A9D8F; /* Deep Ocean Teal */
+  color: #FFFFFF; /* Crisp White */
+  border: 1px solid rgba(74, 74, 74, 0.15);
+  padding: 6px 14px;
   border-radius: 999px;
   font-size: 12px;
   font-weight: 700;
@@ -42,25 +98,40 @@
   display: inline-flex;
   align-items: center;
   gap: 4px;
-  transition: opacity 0.2s;
+  box-shadow: 0 4px 10px rgba(42, 157, 143, 0.3);
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
-.cc-action-btn:hover { opacity: 0.9; }
+
+.cc-action-btn:hover { 
+  transform: translateY(-1px) scale(1.03);
+  box-shadow: 0 6px 15px rgba(42, 157, 143, 0.45); 
+}
+
 .cc-mic-btn {
-  background: rgba(255, 255, 255, 0.08);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  color: #fff;
-  padding: 6px 10px;
+  background: #FFFFFF;
+  border: 1px solid rgba(74, 74, 74, 0.2);
+  color: #4A4A4A;
+  padding: 6px 11px;
   border-radius: 999px;
   font-size: 12px;
   cursor: pointer;
-  transition: all 0.2s;
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
-.cc-mic-btn:hover { background: rgba(255, 255, 255, 0.15); }
+
+.cc-mic-btn:hover { 
+  background: rgba(74, 74, 74, 0.05); 
+  border-color: #4A4A4A;
+  transform: scale(1.05);
+}
+
 .cc-mic-active {
   background: #f43f5e !important;
+  border-color: #f43f5e !important;
   color: white !important;
   animation: cc-pulse-mic 1.2s infinite;
+  box-shadow: 0 0 15px rgba(244, 63, 94, 0.4);
 }
+
 @keyframes cc-pulse-mic {
   0% { box-shadow: 0 0 0 0 rgba(244, 63, 94, 0.7); }
   70% { box-shadow: 0 0 0 8px rgba(244, 63, 94, 0); }

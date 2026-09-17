@@ -5,81 +5,174 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Campus Copilot - Student Vault & Intelligence Hub</title>
   <link rel="icon" type="image/png" sizes="48x48" href="icons/icon-48.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="chatbot.css">
   <style>
     :root {
-      --bg-base: #070a13;
-      --sidebar-bg: rgba(13, 18, 30, 0.85);
-      --card-bg: rgba(17, 24, 39, 0.65);
-      --card-border: rgba(255, 255, 255, 0.07);
-      --card-hover-border: rgba(56, 189, 248, 0.3);
-      --accent-cyan: #38bdf8;
-      --accent-indigo: #6366f1;
+      --bg-base: #FFFBF7; /* Pale Cream */
+      --sidebar-bg: #FAB1A0; /* Dusty Rose Pink */
+      --card-bg: #FFFFFF; /* Crisp White */
+      --card-border: rgba(74, 74, 74, 0.12);
+      --card-hover-border: #2A9D8F; /* Deep Ocean Teal */
+      --mint-green: #2A9D8F;       /* Deep Ocean Teal */
+      --accent-cyan: #4A4A4A; /* Dark Brown-Grey */
+      --accent-indigo: #6F58C9; /* Nebula Purple */
       --accent-emerald: #10b981;
       --accent-rose: #f43f5e;
-      --text-main: #f8fafc;
-      --text-muted: #94a3b8;
+      --accent-gold: #FAB1A0;
+      --accent-silver: #FFFBF7;
+      --text-main: #4A4A4A;
+      --text-muted: rgba(74, 74, 74, 0.7);
     }
 
-    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; }
+    * { 
+      box-sizing: border-box; 
+      margin: 0; 
+      padding: 0; 
+      font-family: 'Inter', system-ui, -apple-system, sans-serif; 
+    }
+
     body {
-      background: radial-gradient(circle at 15% 15%, #1e1b4b 0%, #070a13 55%, #020617 100%);
+      background: var(--bg-base);
       color: var(--text-main);
       min-height: 100vh;
       display: flex;
+      overflow: hidden;
     }
 
     /* Layout Structure */
-    .app-layout { display: flex; width: 100vw; height: 100vh; overflow: hidden; }
+    .app-layout { 
+      display: flex; 
+      width: 100vw; 
+      height: 100vh; 
+      overflow: hidden; 
+    }
 
     /* Glass Sidebar Navigation */
     .sidebar {
       width: 280px;
       background: var(--sidebar-bg);
-      backdrop-filter: blur(24px);
-      border-right: 1px solid var(--card-border);
+      border-right: 1px solid rgba(74, 74, 74, 0.15);
       display: flex;
       flex-direction: column;
       justify-content: space-between;
-      padding: 24px 16px;
+      padding: 32px 20px;
       flex-shrink: 0;
       z-index: 10;
     }
-    .brand-section { display: flex; align-items: center; gap: 12px; padding: 0 8px 24px; border-bottom: 1px solid var(--card-border); }
-    .brand-logo {
-      width: 42px; height: 42px;
-      background: linear-gradient(135deg, var(--accent-cyan), var(--accent-indigo));
-      border-radius: 12px;
-      display: flex; align-items: center; justify-content: center;
-      box-shadow: 0 0 20px rgba(56, 189, 248, 0.4);
+
+    .brand-section { 
+      display: flex; 
+      align-items: center; 
+      gap: 14px; 
+      padding: 0 8px 28px; 
+      border-bottom: 1px solid rgba(74, 74, 74, 0.15); 
     }
-    .brand-logo svg { width: 24px; height: 24px; fill: none; stroke: #fff; stroke-width: 2.2; }
-    .brand-text h1 { font-size: 17px; font-weight: 800; letter-spacing: -0.3px; }
-    .brand-badge { font-size: 10px; background: rgba(56, 189, 248, 0.15); color: var(--accent-cyan); border: 1px solid rgba(56, 189, 248, 0.3); padding: 1px 6px; border-radius: 999px; font-weight: 700; margin-left: 4px; }
+
+    .brand-logo {
+      width: 44px; 
+      height: 44px;
+      background: linear-gradient(135deg, var(--accent-silver), #2A9D8F);
+      border-radius: 14px;
+      display: flex; 
+      align-items: center; 
+      justify-content: center;
+      border: 1.5px solid var(--text-main);
+      box-shadow: 0 4px 10px rgba(74, 74, 74, 0.05);
+      animation: float-logo 4s ease-in-out infinite;
+    }
+
+    @keyframes float-logo {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-4px); }
+    }
+
+    .brand-logo svg { 
+      width: 26px; 
+      height: 26px; 
+      fill: none; 
+      stroke: var(--text-main); 
+      stroke-width: 2.2; 
+    }
+
+    .brand-text h1 { 
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 18px; 
+      font-weight: 700; 
+      color: var(--text-main);
+      letter-spacing: -0.3px; 
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .brand-badge { 
+      font-size: 9px; 
+      background: #FFFFFF; 
+      color: var(--text-main); 
+      border: 1.5px solid var(--text-main); 
+      padding: 2px 8px; 
+      border-radius: 999px; 
+      font-weight: 700; 
+      letter-spacing: 0.5px;
+    }
 
     /* Navigation Menu */
-    .nav-list { list-style: none; margin-top: 20px; display: flex; flex-direction: column; gap: 6px; }
+    .nav-list { 
+      list-style: none; 
+      margin-top: 28px; 
+      display: flex; 
+      flex-direction: column; 
+      gap: 8px; 
+    }
+
     .nav-item {
       display: flex;
       align-items: center;
-      gap: 12px;
-      padding: 12px 14px;
-      border-radius: 12px;
-      color: var(--text-muted);
-      font-size: 13.5px;
+      gap: 14px;
+      padding: 14px 18px;
+      border-radius: 14px;
+      color: var(--text-main);
+      opacity: 0.85;
+      font-size: 14px;
       font-weight: 600;
       cursor: pointer;
-      transition: all 0.2s;
+      transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
       border: 1px solid transparent;
     }
-    .nav-item svg { width: 18px; height: 18px; stroke: currentColor; fill: none; stroke-width: 2; }
-    .nav-item:hover { color: #fff; background: rgba(255, 255, 255, 0.05); }
-    .nav-item.active {
-      color: #fff;
-      background: linear-gradient(135deg, rgba(56, 189, 248, 0.15), rgba(99, 102, 241, 0.15));
-      border-color: rgba(56, 189, 248, 0.3);
-      box-shadow: 0 4px 15px rgba(56, 189, 248, 0.1);
+
+    .nav-item svg { 
+      width: 20px; 
+      height: 20px; 
+      stroke: currentColor; 
+      fill: none; 
+      stroke-width: 2; 
+      transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
     }
-    .nav-item.active svg { stroke: var(--accent-cyan); }
+
+    .nav-item:hover { 
+      color: var(--text-main); 
+      background: rgba(255, 255, 255, 0.18); 
+      transform: translateX(4px);
+    }
+
+    .nav-item:hover svg {
+      transform: scale(1.1);
+    }
+
+    .nav-item.active {
+      color: var(--text-main);
+      background: rgba(255, 255, 255, 0.35);
+      border-color: rgba(74, 74, 74, 0.25);
+      box-shadow: 0 4px 12px rgba(74, 74, 74, 0.05);
+      font-weight: 700;
+    }
+
+    .nav-item.active svg { 
+      stroke: var(--text-main); 
+    }
 
     /* Main Viewport */
     .main-viewport {
@@ -88,7 +181,23 @@
       flex-direction: column;
       height: 100vh;
       overflow-y: auto;
-      padding: 28px 36px;
+      padding: 36px 44px;
+      position: relative;
+    }
+
+    /* Scrollbar Styling */
+    .main-viewport::-webkit-scrollbar {
+      width: 8px;
+    }
+    .main-viewport::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    .main-viewport::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 99px;
+    }
+    .main-viewport::-webkit-scrollbar-thumb:hover {
+      background: rgba(255, 255, 255, 0.12);
     }
 
     /* Top Bar */
@@ -96,104 +205,295 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 24px;
+      margin-bottom: 32px;
     }
-    .page-title h2 { font-size: 22px; font-weight: 800; letter-spacing: -0.5px; }
-    .page-title p { font-size: 13px; color: var(--text-muted); margin-top: 3px; }
-    .top-actions { display: flex; gap: 10px; }
+
+    .page-title h2 { 
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 26px; 
+      font-weight: 700; 
+      letter-spacing: -0.5px; 
+    }
+
+    .page-title p { 
+      font-size: 14px; 
+      color: var(--text-muted); 
+      margin-top: 4px; 
+    }
+
+    .top-actions { 
+      display: flex; 
+      gap: 12px; 
+    }
 
     /* Tab Content Area */
-    .tab-panel { display: none; animation: fadeIn 0.25s ease-out forwards; }
-    .tab-panel.active { display: block; }
-    @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+    .tab-panel { 
+      display: none; 
+      animation: tabFadeIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards; 
+    }
+
+    .tab-panel.active { 
+      display: block; 
+    }
+
+    @keyframes tabFadeIn { 
+      from { 
+        opacity: 0; 
+        transform: translateY(16px) scale(0.98); 
+      } 
+      to { 
+        opacity: 1; 
+        transform: translateY(0) scale(1); 
+      } 
+    }
 
     /* Card Panels */
-    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px; }
+    .grid-2 { 
+      display: grid; 
+      grid-template-columns: 1fr 1fr; 
+      gap: 24px; 
+      margin-bottom: 24px; 
+    }
+
     .card {
       background: var(--card-bg);
       border: 1px solid var(--card-border);
-      backdrop-filter: blur(16px);
-      border-radius: 18px;
-      padding: 22px;
-      transition: border-color 0.2s;
+      border-radius: 20px;
+      padding: 26px;
+      box-shadow: 0 4px 15px rgba(74, 74, 74, 0.03);
+      transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
     }
-    .card:hover { border-color: var(--card-hover-border); }
+
+    .card:hover { 
+      border-color: var(--card-hover-border); 
+      transform: translateY(-8px) scale(1.02);
+      box-shadow: 0 16px 36px rgba(74, 74, 74, 0.1);
+    }
+
     .card-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 16px;
-      padding-bottom: 12px;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      margin-bottom: 20px;
+      padding-bottom: 14px;
+      border-bottom: 1px solid rgba(74, 74, 74, 0.1);
     }
-    .card-title { font-size: 14.5px; font-weight: 700; color: var(--accent-cyan); display: flex; align-items: center; gap: 8px; }
-    .card-title svg { width: 17px; height: 17px; stroke: currentColor; fill: none; stroke-width: 2; }
+
+    .card-title { 
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 16px; 
+      font-weight: 600; 
+      color: var(--accent-cyan); 
+      display: flex; 
+      align-items: center; 
+      gap: 10px; 
+      letter-spacing: 0.2px;
+    }
+
+    .card-title svg { 
+      width: 19px; 
+      height: 19px; 
+      stroke: currentColor; 
+      fill: none; 
+      stroke-width: 2; 
+    }
 
     /* Inputs */
-    .form-group { margin-bottom: 14px; }
-    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-    label { display: block; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.7px; color: var(--text-muted); margin-bottom: 6px; }
+    .form-group { 
+      margin-bottom: 18px; 
+    }
+
+    .form-row { 
+      display: grid; 
+      grid-template-columns: 1fr 1fr; 
+      gap: 16px; 
+    }
+
+    label { 
+      display: block; 
+      font-size: 11px; 
+      font-weight: 700; 
+      text-transform: uppercase; 
+      letter-spacing: 1px; 
+      color: var(--text-muted); 
+      margin-bottom: 8px; 
+    }
+
     input, select, textarea {
       width: 100%;
-      background: rgba(10, 14, 23, 0.85);
-      border: 1px solid var(--card-border);
-      color: #fff;
-      padding: 10px 14px;
-      border-radius: 10px;
-      font-size: 13.5px;
+      background: #FFFFFF;
+      border: 1px solid rgba(74, 74, 74, 0.2);
+      color: var(--text-main);
+      padding: 12px 16px;
+      border-radius: 8px; /* 8px rounded corners */
+      font-size: 14px;
       outline: none;
-      transition: all 0.2s;
+      transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
     }
+
     input:focus, select:focus, textarea:focus {
-      border-color: var(--accent-cyan);
-      box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.15);
-      background: rgba(10, 14, 23, 1);
+      border-color: #2A9D8F !important; /* Deep Ocean Teal active state */
+      box-shadow: 0 0 0 3px rgba(42, 157, 143, 0.2) !important;
+      background: #FFFFFF;
     }
-    textarea { resize: vertical; }
+
+    textarea { 
+      resize: vertical; 
+    }
+
+    /* Locked & Edit Mode Toggle Styles */
+    .edit-toggle-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 6px;
+      border-radius: 8px;
+      opacity: 0.6;
+      transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    }
+    
+    .edit-toggle-btn:hover {
+      background-color: rgba(74, 74, 74, 0.05);
+      opacity: 1;
+      transform: scale(1.1);
+    }
+
+    .edit-toggle-btn svg {
+      width: 20px;
+      height: 20px;
+      stroke: #4A4A4A;
+      transition: stroke 0.3s ease;
+    }
+
+    .edit-toggle-btn.active {
+      opacity: 1;
+      transform: scale(1.15);
+      background-color: rgba(42, 157, 143, 0.1);
+    }
+
+    .edit-toggle-btn.active svg {
+      stroke: #2A9D8F;
+    }
+
+    .card.in-edit-mode {
+      border-color: var(--mint-green) !important;
+      box-shadow: 0 0 0 4px rgba(42, 157, 143, 0.15), 0 16px 36px rgba(74, 74, 74, 0.08) !important;
+    }
+
+    .card-span-2 {
+      grid-column: span 2;
+    }
+
+    @keyframes checkmarkFadeIn {
+      from { opacity: 0; transform: scale(0.8) translateX(5px); }
+      to { opacity: 1; transform: scale(1) translateX(0); }
+    }
+
+    input[readonly], textarea[readonly] {
+      pointer-events: none;
+      background-color: rgba(74, 74, 74, 0.03) !important; /* Soft flat background */
+      border-color: rgba(74, 74, 74, 0.15) !important; /* Muted flat border */
+      box-shadow: none !important;
+      color: var(--text-main) !important;
+      resize: none;
+    }
 
     /* Buttons */
     .btn {
       cursor: pointer;
-      padding: 9px 16px;
-      border-radius: 10px;
-      font-size: 13px;
+      padding: 10px 20px;
+      border-radius: 12px;
+      font-size: 13.5px;
       font-weight: 600;
       border: 1px solid transparent;
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      gap: 6px;
-      transition: all 0.2s;
+      gap: 8px;
+      transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
     }
+
     .btn-primary {
-      background: linear-gradient(135deg, #2563eb, #38bdf8);
-      color: white;
-      box-shadow: 0 4px 14px rgba(37, 99, 235, 0.35);
+      background: var(--mint-green, #2A9D8F);
+      color: #FFFFFF;
+      font-weight: 700;
+      border: 1px solid rgba(74, 74, 74, 0.15);
+      box-shadow: 0 4px 12px rgba(42, 157, 143, 0.3);
+      transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
     }
-    .btn-primary:hover { opacity: 0.95; transform: translateY(-1px); box-shadow: 0 6px 20px rgba(56, 189, 248, 0.4); }
+
+    .btn-primary:hover { 
+      transform: translateY(-8px) scale(1.02); 
+      box-shadow: 0 16px 36px rgba(42, 157, 143, 0.45); 
+    }
+
     .btn-secondary {
-      background: rgba(255, 255, 255, 0.05);
-      border-color: var(--card-border);
+      background: #FFFFFF;
+      border-color: rgba(74, 74, 74, 0.25);
       color: var(--text-main);
+      transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
     }
-    .btn-secondary:hover { background: rgba(255, 255, 255, 0.1); }
+
+    .btn-secondary:hover { 
+      background: rgba(74, 74, 74, 0.03); 
+      border-color: rgba(74, 74, 74, 0.4);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 10px rgba(74, 74, 74, 0.05);
+    }
+
+    /* SVG outline drawing animations inside dashboard */
+    .card:hover svg path,
+    .card:hover svg rect,
+    .card:hover svg circle,
+    .card:hover svg polyline,
+    .card:hover svg line,
+    .nav-item:hover svg path,
+    .nav-item:hover svg rect,
+    .nav-item:hover svg circle,
+    .nav-item:hover svg polyline,
+    .nav-item:hover svg line {
+      stroke: var(--mint-green);
+      stroke-dasharray: 100;
+      stroke-dashoffset: 100;
+      animation: drawOutlineDashboard 1.2s cubic-bezier(0.25, 1, 0.2, 1) forwards;
+    }
+
+    @keyframes drawOutlineDashboard {
+      to {
+        stroke-dashoffset: 0;
+      }
+    }
+
     .btn-mic {
-      background: rgba(244, 63, 94, 0.12);
-      border: 1px solid rgba(244, 63, 94, 0.3);
-      color: #fda4af;
-      padding: 4px 10px;
-      border-radius: 8px;
+      background: rgba(129, 236, 236, 0.12);
+      border: 1px solid rgba(129, 236, 236, 0.3);
+      color: var(--text-main);
+      padding: 5px 12px;
+      border-radius: 9px;
       font-size: 11px;
+      text-transform: uppercase;
+      font-weight: 700;
+      letter-spacing: 0.5px;
     }
-    .btn-mic:hover { background: rgba(244, 63, 94, 0.25); color: #fff; }
+
+    .btn-mic:hover { 
+      background: rgba(129, 236, 236, 0.22); 
+      transform: scale(1.03);
+    }
+
     .mic-recording {
       background: var(--accent-rose) !important;
       color: white !important;
       animation: pulse-recording 1.2s infinite;
+      box-shadow: 0 0 15px rgba(244, 63, 94, 0.4);
     }
+
     @keyframes pulse-recording {
       0% { box-shadow: 0 0 0 0 rgba(244, 63, 94, 0.7); }
-      70% { box-shadow: 0 0 0 8px rgba(244, 63, 94, 0); }
+      70% { box-shadow: 0 0 0 10px rgba(244, 63, 94, 0); }
       100% { box-shadow: 0 0 0 0 rgba(244, 63, 94, 0); }
     }
 
@@ -201,48 +501,668 @@
     input[type=range] {
       -webkit-appearance: none;
       height: 6px;
-      background: #1e293b;
-      border-radius: 5px;
+      background: rgba(74, 74, 74, 0.1);
+      border-radius: 99px;
       border: none;
       padding: 0;
+      outline: none;
     }
+
     input[type=range]::-webkit-slider-thumb {
       -webkit-appearance: none;
       height: 18px;
       width: 18px;
       border-radius: 50%;
-      background: var(--accent-cyan);
+      background: var(--mint-green, #2A9D8F);
       cursor: pointer;
-      box-shadow: 0 0 10px var(--accent-cyan);
+      border: 1px solid rgba(74, 74, 74, 0.2);
+      box-shadow: 0 0 10px rgba(42, 157, 143, 0.4);
+      transition: transform 0.2s ease;
+    }
+
+    input[type=range]::-webkit-slider-thumb:hover {
+      transform: scale(1.2);
     }
 
     /* Global Sync Footer */
     .sync-footer {
       position: sticky;
       bottom: 0;
-      background: rgba(13, 18, 30, 0.85);
-      backdrop-filter: blur(16px);
-      border-top: 1px solid var(--card-border);
-      padding: 16px 0;
+      background: var(--bg-base);
+      border-top: 1px solid rgba(74, 74, 74, 0.1);
+      padding: 20px 0;
       margin-top: auto;
       display: flex;
       justify-content: flex-end;
+      z-index: 5;
     }
 
     .toast {
       position: fixed;
-      bottom: 24px;
-      right: 24px;
-      background: rgba(16, 185, 129, 0.95);
-      backdrop-filter: blur(10px);
-      color: white;
+      bottom: 28px;
+      right: 28px;
+      background: var(--mint-green, #2A9D8F);
+      border: 1px solid rgba(74, 74, 74, 0.2);
+      color: #FFFFFF;
+      padding: 14px 24px;
+      border-radius: 14px;
+      font-weight: 700;
+      font-size: 14px;
+      display: none;
+      box-shadow: 0 10px 30px rgba(74, 74, 74, 0.1);
+      z-index: 1000;
+      animation: toastFadeIn 0.3s ease-out;
+    }
+
+    @keyframes toastFadeIn {
+      from { transform: translateY(10px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+
+    /* Off-Canvas Settings Side Drawer & Overlay Backdrop */
+    .drawer-backdrop {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: rgba(74, 74, 74, 0);
+      backdrop-filter: blur(0px);
+      -webkit-backdrop-filter: blur(0px);
+      display: none;
+      z-index: 1000;
+      transition: background-color 0.4s ease, backdrop-filter 0.4s ease, -webkit-backdrop-filter 0.4s ease;
+    }
+    .drawer-backdrop.active {
+      display: block;
+      background-color: rgba(74, 74, 74, 0.4);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+    }
+
+    .drawer-panel {
+      position: fixed;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      width: 100%;
+      max-width: 480px;
+      background-color: var(--bg-base); /* Pale Cream */
+      border-left: 1.5px solid rgba(74, 74, 74, 0.15);
+      box-shadow: -10px 0 35px rgba(74, 74, 74, 0.08);
+      z-index: 1001;
+      transform: translateX(100%);
+      transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+      display: flex;
+      flex-direction: column;
+    }
+    .drawer-panel.active {
+      transform: translateX(0);
+    }
+
+    .drawer-header {
+      padding: 24px 30px;
+      background-color: var(--sidebar-bg); /* Dusty Rose Pink */
+      border-bottom: 1.5px solid var(--text-main);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: var(--text-main);
+    }
+    .drawer-header h3 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 18px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+    }
+    .drawer-close-btn {
+      background: none;
+      border: none;
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--text-main);
+      cursor: pointer;
+      line-height: 1;
+      transition: transform 0.2s;
+    }
+    .drawer-close-btn:hover {
+      transform: scale(1.15);
+    }
+
+    .drawer-content {
+      flex: 1;
+      display: flex;
+      overflow: hidden;
+    }
+
+    /* Vertical Tab Layout inside Drawer */
+    .drawer-sidebar {
+      width: 150px;
+      border-right: 1.5px solid rgba(74, 74, 74, 0.15);
+      background-color: rgba(74, 74, 74, 0.02);
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      padding: 20px 10px;
+    }
+    .drawer-tab-btn {
+      padding: 12px 14px;
+      text-align: left;
+      background: none;
+      border: none;
+      font-size: 13.5px;
+      font-weight: 600;
+      color: var(--text-main);
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .drawer-tab-btn:hover {
+      background-color: var(--mint-green);
+      color: var(--white);
+    }
+    .drawer-tab-btn.active {
+      background-color: var(--mint-green);
+      color: var(--white);
+      box-shadow: 0 2px 8px rgba(42, 157, 143, 0.3);
+    }
+
+    .drawer-tab-viewport {
+      flex: 1;
+      padding: 30px;
+      overflow-y: auto;
+    }
+    .drawer-tab-panel {
+      display: none;
+      flex-direction: column;
+      gap: 20px;
+      animation: tabFadeIn 0.4s ease-out;
+    }
+    .drawer-tab-panel.active {
+      display: flex;
+    }
+
+    /* Settings Drawer zero-gravity inner cascades */
+    .drawer-sidebar .drawer-tab-btn {
+      opacity: 0;
+      transform: translateX(-15px);
+      transition: transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.6s ease;
+    }
+    .drawer-panel.active .drawer-sidebar .drawer-tab-btn:nth-child(1) { opacity: 1; transform: translateX(0); transition-delay: 200ms; }
+    .drawer-panel.active .drawer-sidebar .drawer-tab-btn:nth-child(2) { opacity: 1; transform: translateX(0); transition-delay: 280ms; }
+    .drawer-panel.active .drawer-sidebar .drawer-tab-btn:nth-child(3) { opacity: 1; transform: translateX(0); transition-delay: 360ms; }
+
+    .drawer-tab-viewport .drawer-tab-panel h4 {
+      opacity: 0;
+      transform: translateY(15px);
+      transition: transform 0.6s cubic-bezier(0.25, 1, 0.2, 1), opacity 0.6s ease;
+    }
+    .drawer-panel.active .drawer-tab-viewport .drawer-tab-panel.active h4 {
+      opacity: 1;
+      transform: translateY(0);
+      transition-delay: 250ms;
+    }
+
+    .drawer-tab-viewport .drawer-tab-panel .form-group {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: transform 0.6s cubic-bezier(0.25, 1, 0.2, 1), opacity 0.6s ease;
+    }
+    .drawer-panel.active .drawer-tab-viewport .drawer-tab-panel.active .form-group:nth-of-type(1) {
+      opacity: 1;
+      transform: translateY(0);
+      transition-delay: 320ms;
+    }
+    .drawer-panel.active .drawer-tab-viewport .drawer-tab-panel.active .form-group:nth-of-type(2) {
+      opacity: 1;
+      transform: translateY(0);
+      transition-delay: 400ms;
+    }
+
+    .drawer-tab-viewport .drawer-tab-panel .btn {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: transform 0.6s cubic-bezier(0.25, 1, 0.2, 1), opacity 0.6s ease;
+    }
+    .drawer-panel.active .drawer-tab-viewport .drawer-tab-panel.active .btn {
+      opacity: 1;
+      transform: translateY(0);
+      transition-delay: 480ms;
+    }
+
+    /* Settings Hub Sub-routing styles */
+    .settings-nav-item {
+      padding: 10px 14px;
+      font-size: 13.5px;
+      font-weight: 600;
+      color: var(--text-main);
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .settings-nav-item:hover {
+      background-color: rgba(74, 74, 74, 0.04);
+    }
+    .settings-nav-item.active {
+      background-color: var(--mint-green) !important;
+      color: #fff !important;
+      font-weight: 700;
+      box-shadow: 0 4px 12px rgba(42, 157, 143, 0.2);
+    }
+    .settings-sub-panel {
+      display: none;
+      animation: tabFadeIn 0.4s ease-out;
+      position: relative;
+      min-height: 400px;
+    }
+    .settings-sub-panel.active {
+      display: block;
+    }
+
+    /* Profile Loader Overlay */
+    #profileLoadingOverlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: #FFFFFF;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      z-index: 100;
+      border-radius: 20px;
+      transition: opacity 0.3s ease, visibility 0.3s ease;
+    }
+    .profile-spinner {
+      width: 40px;
+      height: 40px;
+      border: 3.5px solid rgba(42, 157, 143, 0.15);
+      border-top-color: var(--mint-green);
+      border-radius: 50%;
+      animation: spin-loader 0.8s linear infinite;
+    }
+    @keyframes spin-loader {
+      to { transform: rotate(360deg); }
+    }
+
+    /* Custom Toggles/Switches */
+    .switch-label {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 14px 18px;
+      background: rgba(74, 74, 74, 0.02);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      cursor: pointer;
+      transition: background 0.3s;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-main);
+      text-transform: none;
+      letter-spacing: normal;
+      margin-bottom: 8px;
+    }
+    .switch-label:hover {
+      background: rgba(74, 74, 74, 0.05);
+    }
+    .switch-label input[type="checkbox"] {
+      display: none;
+    }
+    .switch-toggle-track {
+      width: 44px;
+      height: 24px;
+      background: rgba(74, 74, 74, 0.15);
+      border-radius: 99px;
+      position: relative;
+      transition: background 0.3s;
+    }
+    .switch-toggle-thumb {
+      width: 18px;
+      height: 18px;
+      background: #fff;
+      border-radius: 50%;
+      position: absolute;
+      top: 3px;
+      left: 3px;
+      transition: transform 0.3s;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    .switch-label input[type="checkbox"]:checked + .switch-toggle-track {
+      background: var(--mint-green) !important;
+    }
+    .switch-label input[type="checkbox"]:checked + .switch-toggle-track .switch-toggle-thumb {
+      transform: translateX(20px);
+    }
+
+    /* Dark Mode variables override */
+    body.dark-theme {
+      --bg-base: #121212 !important;
+      --sidebar-bg: #1A1A1A !important;
+      --card-bg: #1E1E1E !important;
+      --card-border: rgba(255,255,255,0.1) !important;
+      --text-main: #F5F6FA !important;
+      --text-muted: #A4B0BE !important;
+      background-color: #121212 !important;
+    }
+    body.dark-theme input, body.dark-theme select, body.dark-theme textarea {
+      background: #252525 !important;
+      border-color: rgba(255, 255, 255, 0.15) !important;
+      color: #F5F6FA !important;
+    }
+    body.dark-theme .card, body.dark-theme .settings-container, body.dark-theme .google-profile-card, body.dark-theme #dashGoogleCard {
+      background: #1E1E1E !important;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.2) !important;
+    }
+    body.dark-theme .settings-sub-sidebar {
+      background: #181818 !important;
+      border-color: rgba(255,255,255,0.1) !important;
+    }
+
+    /* Accent colors class overrides */
+    body.accent-indigo {
+      --mint-green: #4F46E5 !important;
+      --accent-cyan: #6366F1 !important;
+    }
+    body.accent-teal {
+      --mint-green: #0D9488 !important;
+      --accent-cyan: #14B8A6 !important;
+    }
+    body.accent-purple {
+      --mint-green: #9333EA !important;
+      --accent-cyan: #A855F7 !important;
+    }
+
+    /* Density modes overrides */
+    body.density-compact .form-group {
+      margin-bottom: 10px !important;
+    }
+    body.density-compact input, body.density-compact select, body.density-compact textarea {
+      padding: 8px 12px !important;
+      font-size: 13px !important;
+    }
+    body.density-compact .card {
+      padding: 18px !important;
+    }
+
+    /* Toast style overrides */
+    .toast-msg {
+      background: var(--mint-green);
+      color: #fff;
       padding: 12px 20px;
       border-radius: 12px;
-      font-weight: 600;
       font-size: 13.5px;
+      font-weight: 700;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+      animation: toastSlideIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    @keyframes toastSlideIn {
+      from { transform: translateY(20px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+
+    /* Features Grid styles */
+    .feature-grid-layout {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 20px;
+      margin-top: 24px;
+    }
+    .feature-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 24px;
+      transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    }
+    .feature-card:hover {
+      transform: translateY(-6px);
+      border-color: var(--mint-green);
+      box-shadow: 0 12px 28px rgba(74,74,74,0.06);
+    }
+
+    /* Avatar Customization Styles */
+    .avatar-wrapper {
+      position: relative;
+      display: inline-block;
+      cursor: pointer;
+      border-radius: 50%;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      vertical-align: middle;
+    }
+    .avatar-wrapper:hover {
+      transform: scale(1.04);
+      box-shadow: 0 4px 12px rgba(74,74,74,0.1);
+    }
+    .avatar-wrapper img {
+      display: block;
+    }
+    .avatar-pencil-overlay {
+      position: absolute;
+      bottom: -2px;
+      right: -2px;
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      background: #FFFFFF;
+      border: 1.5px solid var(--text-main);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+      transition: all 0.2s ease;
+      color: var(--text-main);
+    }
+    .avatar-wrapper:hover .avatar-pencil-overlay {
+      transform: scale(1.1);
+      background: var(--mint-green);
+      color: #FFFFFF;
+      border-color: var(--mint-green);
+    }
+    .avatar-pencil-overlay svg {
+      width: 11px;
+      height: 11px;
+      stroke: currentColor;
+    }
+
+    /* Segmented Tab Controls */
+    .segmented-control {
+      display: flex;
+      background: rgba(74, 74, 74, 0.05);
+      border-radius: 10px;
+      padding: 3px;
+      margin-bottom: 20px;
+    }
+    .segmented-btn {
+      flex: 1;
+      border: none;
+      background: transparent;
+      padding: 8px;
+      font-size: 13.5px;
+      font-weight: 600;
+      color: var(--text-muted);
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .segmented-btn.active {
+      background: #FFFFFF;
+      color: var(--text-main);
+      box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+    }
+
+    /* Search & Category Filter Tags */
+    .avatar-filter-container {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+    .avatar-search-input {
+      width: 100%;
+      padding: 10px 14px;
+      border-radius: 10px;
+      border: 1.5px solid var(--card-border);
+      font-size: 13.5px;
+      outline: none;
+      transition: border-color 0.2s ease;
+    }
+    .avatar-search-input:focus {
+      border-color: var(--mint-green);
+    }
+    .avatar-categories-bar {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      padding-bottom: 6px;
+      scrollbar-width: none;
+    }
+    .avatar-categories-bar::-webkit-scrollbar {
       display: none;
-      box-shadow: 0 10px 20px rgba(0,0,0,0.5);
-      z-index: 1000;
+    }
+    .avatar-cat-tag {
+      padding: 6px 12px;
+      border-radius: 20px;
+      background: rgba(74, 74, 74, 0.04);
+      color: var(--text-muted);
+      font-size: 12px;
+      font-weight: 600;
+      white-space: nowrap;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      border: 1px solid transparent;
+    }
+    .avatar-cat-tag.active {
+      background: rgba(42, 157, 143, 0.08);
+      color: var(--mint-green);
+      border-color: rgba(42, 157, 143, 0.2);
+    }
+
+    /* Grid for Predefined Avatars */
+    .avatar-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(68px, 1fr));
+      gap: 12px;
+      max-height: 260px;
+      overflow-y: auto;
+      padding-right: 4px;
+      margin-bottom: 10px;
+    }
+    .avatar-grid-item {
+      aspect-ratio: 1;
+      border-radius: 50%;
+      border: 2.5px solid transparent;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 32px;
+      transition: all 0.2s ease;
+      position: relative;
+      background: rgba(74, 74, 74, 0.03);
+      user-select: none;
+    }
+    .avatar-grid-item:hover {
+      transform: scale(1.08);
+      box-shadow: 0 4px 10px rgba(0,0,0,0.06);
+    }
+    .avatar-grid-item.selected {
+      border-color: var(--mint-green);
+      transform: scale(1.05);
+      box-shadow: 0 4px 12px rgba(42, 157, 143, 0.2);
+    }
+    .avatar-grid-item-checkmark {
+      position: absolute;
+      top: -2px;
+      right: -2px;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: var(--mint-green);
+      color: #FFFFFF;
+      font-size: 10px;
+      font-weight: bold;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    .avatar-grid-item.selected .avatar-grid-item-checkmark {
+      display: flex;
+    }
+
+    /* Drag & Drop File Zone */
+    .avatar-upload-zone {
+      border: 2px dashed var(--card-border);
+      border-radius: 16px;
+      padding: 36px 20px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      background: rgba(74, 74, 74, 0.01);
+    }
+    .avatar-upload-zone:hover, .avatar-upload-zone.dragover {
+      border-color: var(--mint-green);
+      background: rgba(42, 157, 143, 0.02);
+    }
+    .avatar-upload-icon {
+      font-size: 32px;
+      margin-bottom: 10px;
+    }
+    .avatar-upload-text {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-main);
+      margin-bottom: 4px;
+    }
+    .avatar-upload-subtext {
+      font-size: 11.5px;
+      color: var(--text-muted);
+    }
+
+    /* Cropping Viewport Container */
+    .avatar-crop-container {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      gap: 16px;
+      margin-top: 10px;
+    }
+    .avatar-crop-viewport {
+      width: 200px;
+      height: 200px;
+      border-radius: 50%;
+      border: 3px solid var(--mint-green);
+      overflow: hidden;
+      position: relative;
+      background: #f0f0f0;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.08);
+      cursor: grab;
+    }
+    .avatar-crop-viewport:active {
+      cursor: grabbing;
+    }
+    .avatar-crop-image {
+      position: absolute;
+      top: 0;
+      left: 0;
+      transform-origin: 0 0;
+      user-select: none;
+      -webkit-user-drag: none;
+    }
+    .avatar-crop-controls {
+      width: 100%;
+      max-width: 280px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
     }
   </style>
 </head>
@@ -252,8 +1172,8 @@
     <aside class="sidebar">
       <div>
         <div class="brand-section">
-          <div class="brand-logo">
-            <svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+          <div class="brand-logo" style="background: none; border: none; box-shadow: none; width: 44px; height: 44px; padding: 0;">
+            <img src="icons/campus_copilot_icon.svg" alt="Icon" style="width: 100%; height: 100%; object-fit: contain;">
           </div>
           <div class="brand-text">
             <h1>Campus Copilot <span class="brand-badge">MV3</span></h1>
@@ -262,21 +1182,29 @@
         </div>
 
         <ul class="nav-list">
-          <li class="nav-item active" data-tab="tab-profile">
-            <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-            Student Profile
+          <li class="nav-item active" data-tab="tab-dashboard">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-grid" style="width: 18px; height: 18px;"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+            Dashboard
           </li>
-          <li class="nav-item" data-tab="tab-cr">
-            <svg viewBox="0 0 24 24"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
-            CR / WhatsApp Parser
+          <li class="nav-item" data-tab="tab-features">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-zap" style="width: 18px; height: 18px;"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+            Features
           </li>
-          <li class="nav-item" data-tab="tab-reviews">
-            <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
-            Campus Reviews Vault
+          <li class="nav-item" data-tab="tab-settings-hub">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-settings" style="width: 18px; height: 18px;"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+            Settings
           </li>
-          <li class="nav-item" data-tab="tab-settings">
-            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
-            AI Engine & Settings
+          <li class="nav-item" data-tab="tab-reviews-hub">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-archive" style="width: 18px; height: 18px;"><polyline points="21 8 21 21 3 21 3 8"/><rect x="1" y="3" width="22" height="5"/><line x1="10" y1="12" x2="14" y2="12"/></svg>
+            Reviews Vault
+          </li>
+          <li class="nav-item" data-tab="tab-about">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-info" style="width: 18px; height: 18px;"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+            About
+          </li>
+          <li class="nav-item" id="logoutBtn" style="margin-top: 24px; color: #FF7675;">
+            <svg viewBox="0 0 24 24" style="stroke: #FF7675; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; width: 18px; height: 18px;"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+            Log Out
           </li>
         </ul>
       </div>
@@ -289,110 +1217,832 @@
         </div>
       </div>
     </aside>
-
     <!-- Main Viewport Content -->
     <main class="main-viewport">
       <div class="top-bar">
         <div class="page-title">
-          <h2 id="viewTitle">Student Profile Vault</h2>
-          <p id="viewSubtitle">Manage identity credentials and core university records</p>
+          <h2 id="viewTitle">Dashboard</h2>
+          <p id="viewSubtitle">Welcome back to Campus Copilot control center</p>
         </div>
         <div class="top-actions">
-          <button id="exportBtn" class="btn btn-secondary">💾 Export Backup</button>
-          <button id="importBtn" class="btn btn-secondary">📂 Import Backup</button>
-          <input type="file" id="importFileInput" style="display:none" accept=".json">
+          <span class="import-badge" id="globalSyncStatus" style="background-color: rgba(42, 157, 143, 0.1); color: var(--mint-green); padding: 6px 14px; border-radius: 99px; font-size: 12px; font-weight: 700; display: inline-flex; align-items: center; gap: 6px;"><span style="width: 8px; height: 8px; border-radius: 50%; background: var(--mint-green);"></span> Cloud Sync Active</span>
         </div>
       </div>
 
-      <!-- TAB 1: Student Profile -->
-      <section id="tab-profile" class="tab-panel active">
-        <div class="grid-2">
-          <div class="card">
-            <div class="card-header">
-              <div class="card-title">
-                <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-                Core Identity
+      <!-- TAB 1: Dashboard View -->
+      <section id="tab-dashboard" class="tab-panel active">
+        <!-- Google Connected Banner Card -->
+        <div id="dashGoogleCard" style="display: flex; align-items: center; justify-content: space-between; gap: 16px; background: #fff; border: 1px solid var(--card-border); padding: 18px 24px; border-radius: 16px; margin-bottom: 24px; box-shadow: 0 4px 12px rgba(74,74,74,0.02); flex-wrap: wrap;">
+          <div style="display: flex; align-items: center; gap: 16px;">
+            <div class="avatar-wrapper edit-avatar-trigger" aria-label="Change profile picture" title="Change profile picture" style="width: 48px; height: 48px;">
+              <img id="dashUserAvatar" src="https://lh3.googleusercontent.com/a/default-user" alt="Avatar" style="width: 48px; height: 48px; border-radius: 50%; border: 1.5px solid var(--text-main); object-fit: cover;">
+              <div class="avatar-pencil-overlay">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M12 20h9M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/>
+                </svg>
               </div>
             </div>
-            <div class="form-group">
-              <label>Full Legal Name</label>
-              <input type="text" id="fullName" placeholder="Debojyoti Dhar">
-            </div>
-            <div class="form-row">
-              <div class="form-group">
-                <label>Full Registration / Roll No</label>
-                <input type="text" id="rollNo" placeholder="26BCS10220">
-              </div>
-              <div class="form-group">
-                <label>Numeric Roll (Digits Only)</label>
-                <input type="text" id="numericRoll" placeholder="10220">
-              </div>
-            </div>
-            <div class="form-row">
-              <div class="form-group">
-                <label>Contact Number</label>
-                <input type="text" id="phoneNumber" placeholder="9883593329">
-              </div>
-              <div class="form-group">
-                <label>College Email</label>
-                <input type="email" id="collegeEmail" placeholder="debojyoti.26bcs10220@sst.scaler.com">
-              </div>
+            <div class="google-details">
+              <p id="dashUserNameText" style="font-size: 15px; font-weight: 700; color: var(--text-main);"></p>
+              <span id="dashUserEmailText" style="font-size: 12.5px; color: var(--text-muted);"></span>
             </div>
           </div>
+          <div style="text-align: right;">
+            <span class="import-badge" style="background-color: rgba(42, 157, 143, 0.1); color: var(--mint-green); padding: 4px 12px; border-radius: 99px; font-size: 11px; font-weight: 700; display: inline-block; margin-bottom: 6px;">✓ Google Account Connected</span>
+            <div id="dashCompletionBadge" style="font-size: 12px; font-weight: 700; color: var(--text-muted);">Profile Completion: 100%</div>
+          </div>
+        </div>
 
-          <div class="card">
-            <div class="card-header">
-              <div class="card-title">
-                <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-                Academic Section & Bio
+        <!-- Dashboard Stats Grid -->
+        <div class="grid-2" style="margin-bottom: 24px;">
+          <!-- Card 1: Profile Completion Progress -->
+          <div class="card" style="display: flex; flex-direction: column; justify-content: space-between;">
+            <div>
+              <div class="card-header" style="margin-bottom: 12px; padding-bottom: 8px;">
+                <div class="card-title" style="color: var(--mint-green);">📈 Profile Completion</div>
+                <span style="font-size: 18px; font-weight: 800; color: var(--text-main);" id="completionPctValue">100%</span>
+              </div>
+              <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 16px;">Complete your student vault record to unlock automated form matching.</p>
+              <div style="width: 100%; height: 8px; background: rgba(74,74,74,0.1); border-radius: 99px; overflow: hidden; margin-bottom: 16px;">
+                <div id="dashProgressBar" style="width: 100%; height: 100%; background: var(--mint-green); border-radius: 99px; transition: width 0.6s ease;"></div>
               </div>
             </div>
-            <div class="form-row">
-              <div class="form-group">
-                <label>Graduation Year</label>
-                <input type="text" id="gradYear" placeholder="2030">
-              </div>
-              <div class="form-group">
-                <label>Section / Batch</label>
-                <input type="text" id="batchSection" placeholder="A">
+            <button class="btn btn-primary" id="dashCompleteProfileBtn" style="align-self: flex-start; padding: 10px 20px;">Complete Profile</button>
+          </div>
+
+          <!-- Counter Cards Sub-Grid -->
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+            <!-- Assisted Forms Card -->
+            <div class="card" style="padding: 20px; display: flex; flex-direction: column; justify-content: space-between;">
+              <div style="font-size: 24px;">📝</div>
+              <div>
+                <h4 style="font-size: 24px; font-weight: 800; color: var(--text-main); margin-bottom: 2px;" id="statFormsAssisted">0</h4>
+                <p style="font-size: 12.5px; font-weight: 600; color: var(--text-muted);">Forms Assisted</p>
               </div>
             </div>
-            <div class="form-group">
-              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
-                <label style="margin:0;">Bio & Relevant Skills</label>
-                <button id="micBioBtn" class="btn btn-mic">🎙️ Dictate</button>
+            <!-- Auto-Filled Fields Card -->
+            <div class="card" style="padding: 20px; display: flex; flex-direction: column; justify-content: space-between;">
+              <div style="font-size: 24px;">⚡</div>
+              <div>
+                <h4 style="font-size: 24px; font-weight: 800; color: var(--text-main); margin-bottom: 2px;" id="statFieldsFilled">0</h4>
+                <p style="font-size: 12.5px; font-weight: 600; color: var(--text-muted);">Fields Auto-Filled</p>
               </div>
-              <textarea id="bio" rows="4" placeholder="Full-Stack Developer & AI Systems Engineer proficient in React, Next.js, Node.js, Python, Chrome Extensions..."></textarea>
+            </div>
+            <!-- Time Saved Card -->
+            <div class="card" style="padding: 20px; display: flex; flex-direction: column; justify-content: space-between; grid-column: span 2;">
+              <div style="display: flex; justify-content: space-between; align-items: center;">
+                <div style="font-size: 24px;">⏱️</div>
+                <h4 style="font-size: 22px; font-weight: 800; color: var(--mint-green);" id="statTimeSaved">0m</h4>
+              </div>
+              <p style="font-size: 12.5px; font-weight: 600; color: var(--text-muted); margin-top: 8px;">Total Time Saved from Repetitive Entry</p>
             </div>
           </div>
         </div>
-      </section>
 
-      <!-- TAB 2: CR & WhatsApp Parser -->
-      <section id="tab-cr" class="tab-panel">
+        <!-- Recent Forms Table -->
         <div class="card">
-          <div class="card-header">
-            <div class="card-title">
-              <svg viewBox="0 0 24 24"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
-              WhatsApp Announcement & CR Instruction Parser
-            </div>
-            <button id="micCrBtn" class="btn btn-mic">🎙️ Dictate</button>
+          <div class="card-header" style="margin-bottom: 16px;">
+            <div class="card-title">📋 Recent Forms Completed</div>
+            <button class="btn btn-secondary" id="tryDemoFormBtn" style="padding: 6px 14px; font-size: 12px;">Try a Demo Form</button>
           </div>
-          <p style="font-size:12.5px; color:var(--text-muted); margin-bottom:12px;">
-            Paste unformatted announcement text directly from class WhatsApp groups. The AI priority engine will automatically parse tracks, mentor assignments, and submission guidelines to override default answers.
-          </p>
-          <div class="form-group">
-            <textarea id="crAnnouncement" rows="7" placeholder="Paste WhatsApp announcement (e.g. Choose Track 2: Generative AI, Mentor: Dr. Ramanujan, Team: ByteForce)..."></textarea>
-          </div>
-          <div style="display:flex; gap:10px;">
-            <button id="sampleCrBtn" class="btn btn-secondary">Insert Sample CR Notice</button>
-            <button id="clearCrBtn" class="btn btn-secondary">Clear Notice</button>
+          <div style="overflow-x: auto;">
+            <table style="width: 100%; border-collapse: collapse; text-align: left;">
+              <thead>
+                <tr style="border-bottom: 2px solid rgba(74,74,74,0.1);">
+                  <th style="padding: 12px 8px; font-size: 12px; font-weight: 700; color: var(--text-muted); text-transform: uppercase;">Form Name</th>
+                  <th style="padding: 12px 8px; font-size: 12px; font-weight: 700; color: var(--text-muted); text-transform: uppercase;">Date</th>
+                  <th style="padding: 12px 8px; font-size: 12px; font-weight: 700; color: var(--text-muted); text-transform: uppercase;">Fields</th>
+                  <th style="padding: 12px 8px; font-size: 12px; font-weight: 700; color: var(--text-muted); text-transform: uppercase;">Status</th>
+                  <th style="padding: 12px 8px; font-size: 12px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; text-align: right;">Action</th>
+                </tr>
+              </thead>
+              <tbody id="recentFormsTableBody">
+                <tr style="border-bottom: 1px solid rgba(74,74,74,0.06); cursor: pointer;" class="form-row-item" data-form="mass-review">
+                  <td style="padding: 14px 8px; font-size: 13.5px; font-weight: 700; color: var(--text-main);">Mass Review - Week 3</td>
+                  <td style="padding: 14px 8px; font-size: 13px; color: var(--text-muted);">Aug 25, 2026</td>
+                  <td style="padding: 14px 8px; font-size: 13px; color: var(--text-muted);">15 Fields</td>
+                  <td style="padding: 14px 8px;"><span style="background: rgba(42, 157, 143, 0.1); color: var(--mint-green); padding: 4px 8px; border-radius: 99px; font-size: 11px; font-weight: 700;">Completed</span></td>
+                  <td style="padding: 14px 8px; text-align: right;"><button class="btn btn-secondary view-form-detail-btn" style="padding: 4px 10px; font-size: 11.5px;">View</button></td>
+                </tr>
+                <tr style="border-bottom: 1px solid rgba(74,74,74,0.06); cursor: pointer;" class="form-row-item" data-form="techfest">
+                  <td style="padding: 14px 8px; font-size: 13.5px; font-weight: 700; color: var(--text-main);">TechFest Registration</td>
+                  <td style="padding: 14px 8px; font-size: 13px; color: var(--text-muted);">Aug 24, 2026</td>
+                  <td style="padding: 14px 8px; font-size: 13px; color: var(--text-muted);">10 Fields</td>
+                  <td style="padding: 14px 8px;"><span style="background: rgba(42, 157, 143, 0.1); color: var(--mint-green); padding: 4px 8px; border-radius: 99px; font-size: 11px; font-weight: 700;">Completed</span></td>
+                  <td style="padding: 14px 8px; text-align: right;"><button class="btn btn-secondary view-form-detail-btn" style="padding: 4px 10px; font-size: 11.5px;">View</button></td>
+                </tr>
+                <tr style="border-bottom: 1px solid rgba(74,74,74,0.06); cursor: pointer;" class="form-row-item" data-form="scholarship">
+                  <td style="padding: 14px 8px; font-size: 13.5px; font-weight: 700; color: var(--text-main);">Scholarship Application</td>
+                  <td style="padding: 14px 8px; font-size: 13px; color: var(--text-muted);">Aug 22, 2026</td>
+                  <td style="padding: 14px 8px; font-size: 13px; color: var(--text-muted);">45 Fields</td>
+                  <td style="padding: 14px 8px;"><span style="background: rgba(250, 177, 160, 0.2); color: #E17055; padding: 4px 8px; border-radius: 99px; font-size: 11px; font-weight: 700;">Needs Review</span></td>
+                  <td style="padding: 14px 8px; text-align: right;"><button class="btn btn-secondary view-form-detail-btn" style="padding: 4px 10px; font-size: 11.5px;">View</button></td>
+                </tr>
+                <tr style="border-bottom: 1px solid rgba(74,74,74,0.06); cursor: pointer;" class="form-row-item" data-form="internship">
+                  <td style="padding: 14px 8px; font-size: 13.5px; font-weight: 700; color: var(--text-main);">Internship Registration</td>
+                  <td style="padding: 14px 8px; font-size: 13px; color: var(--text-muted);">Aug 18, 2026</td>
+                  <td style="padding: 14px 8px; font-size: 13px; color: var(--text-muted);">22 Fields</td>
+                  <td style="padding: 14px 8px;"><span style="background: rgba(74, 74, 74, 0.08); color: var(--text-muted); padding: 4px 8px; border-radius: 99px; font-size: 11px; font-weight: 700;">In Progress</span></td>
+                  <td style="padding: 14px 8px; text-align: right;"><button class="btn btn-secondary view-form-detail-btn" style="padding: 4px 10px; font-size: 11.5px;">View</button></td>
+                </tr>
+              </tbody>
+            </table>
           </div>
         </div>
       </section>
 
-      <!-- TAB 3: Campus Reviews Vault -->
-      <section id="tab-reviews" class="tab-panel">
+      <!-- TAB 2: Features View -->
+      <section id="tab-features" class="tab-panel">
+        <div class="card" style="margin-bottom: 24px; background: linear-gradient(135deg, rgba(42, 157, 143, 0.08), rgba(250, 177, 160, 0.04));">
+          <h3 style="font-family: 'Space Grotesk', sans-serif; font-size: 22px; font-weight: 700; color: var(--text-main); margin-bottom: 8px;">Everything you need to eliminate repetitive form filling.</h3>
+          <p style="font-size: 14px; color: var(--text-muted); max-width: 680px; line-height: 1.5;">Campus Copilot turns repetitive student paperwork into a faster, smarter, and more secure automatic matching workflow.</p>
+        </div>
+
+        <div class="feature-grid-layout">
+          <!-- Card 1 -->
+          <div class="feature-card">
+            <div style="font-size: 24px; margin-bottom: 12px;">⚡</div>
+            <h4 style="font-family: 'Space Grotesk', sans-serif; font-size: 15px; font-weight: 700; color: var(--text-main); margin-bottom: 8px;">AI Form Autofill</h4>
+            <p style="font-size: 13px; color: var(--text-muted); line-height: 1.4;">Automatically matches and maps your pre-filled student credentials into form input containers instantly.</p>
+          </div>
+          <!-- Card 2 -->
+          <div class="feature-card">
+            <div style="font-size: 24px; margin-bottom: 12px;">🧠</div>
+            <h4 style="font-family: 'Space Grotesk', sans-serif; font-size: 15px; font-weight: 700; color: var(--text-main); margin-bottom: 8px;">Smart Field Matching</h4>
+            <p style="font-size: 13px; color: var(--text-muted); line-height: 1.4;">Semantically maps synonyms like "Student Name", "Legal Name", and "Candidate" back to your profile record.</p>
+          </div>
+          <!-- Card 3 -->
+          <div class="feature-card">
+            <div style="font-size: 24px; margin-bottom: 12px;">🔒</div>
+            <h4 style="font-family: 'Space Grotesk', sans-serif; font-size: 15px; font-weight: 700; color: var(--text-main); margin-bottom: 8px;">Profile Vault</h4>
+            <p style="font-size: 13px; color: var(--text-muted); line-height: 1.4;">Secures and locks your academic credentials locally using advanced client storage encryption patterns.</p>
+          </div>
+          <!-- Card 4 -->
+          <div class="feature-card">
+            <div style="font-size: 24px; margin-bottom: 12px;">🔎</div>
+            <h4 style="font-family: 'Space Grotesk', sans-serif; font-size: 15px; font-weight: 700; color: var(--text-main); margin-bottom: 8px;">Missing Info Detection</h4>
+            <p style="font-size: 13px; color: var(--text-muted); line-height: 1.4;">Scans form inputs and highlights empty or required attributes that are missing from your vault records.</p>
+          </div>
+          <!-- Card 5 -->
+          <div class="feature-card">
+            <div style="font-size: 24px; margin-bottom: 12px;">🛡️</div>
+            <h4 style="font-family: 'Space Grotesk', sans-serif; font-size: 15px; font-weight: 700; color: var(--text-main); margin-bottom: 8px;">Review Before Submit</h4>
+            <p style="font-size: 13px; color: var(--text-muted); line-height: 1.4;">Provides an inline confirmation dialog step before writing or injecting sensitive profile parameters.</p>
+          </div>
+          <!-- Card 6 -->
+          <div class="feature-card">
+            <div style="font-size: 24px; margin-bottom: 12px;">📜</div>
+            <h4 style="font-family: 'Space Grotesk', sans-serif; font-size: 15px; font-weight: 700; color: var(--text-main); margin-bottom: 8px;">Form History</h4>
+            <p style="font-size: 13px; color: var(--text-muted); line-height: 1.4;">Keeps a client-side database audit log showing the execution details of autofills and submission updates.</p>
+          </div>
+          <!-- Card 7 -->
+          <div class="feature-card">
+            <div style="font-size: 24px; margin-bottom: 12px;">🔌</div>
+            <h4 style="font-family: 'Space Grotesk', sans-serif; font-size: 15px; font-weight: 700; color: var(--text-main); margin-bottom: 8px;">Browser Extension</h4>
+            <p style="font-size: 13px; color: var(--text-muted); line-height: 1.4;">Autofills Google Forms and academic applications inline while you navigate the web.</p>
+          </div>
+          <!-- Card 8 -->
+          <div class="feature-card">
+            <div style="font-size: 24px; margin-bottom: 12px;">🔐</div>
+            <h4 style="font-family: 'Space Grotesk', sans-serif; font-size: 15px; font-weight: 700; color: var(--text-main); margin-bottom: 8px;">Privacy Controls</h4>
+            <p style="font-size: 13px; color: var(--text-muted); line-height: 1.4;">Grants full control to clear, export, or limit the application's read and write capacities over data fields.</p>
+          </div>
+          <!-- Card 9 -->
+          <div class="feature-card">
+            <div style="font-size: 24px; margin-bottom: 12px;">🎯</div>
+            <h4 style="font-family: 'Space Grotesk', sans-serif; font-size: 15px; font-weight: 700; color: var(--text-main); margin-bottom: 8px;">Confidence Score</h4>
+            <p style="font-size: 13px; color: var(--text-muted); line-height: 1.4;">Visually tags each matched field with dynamic accuracy metrics before execution.</p>
+          </div>
+          <!-- Card 10 -->
+          <div class="feature-card">
+            <div style="font-size: 24px; margin-bottom: 12px;">✨</div>
+            <h4 style="font-family: 'Space Grotesk', sans-serif; font-size: 15px; font-weight: 700; color: var(--text-main); margin-bottom: 8px;">Gemini AI Integration</h4>
+            <p style="font-size: 13px; color: var(--text-muted); line-height: 1.4;">Harnesses the Gemini LLM engine to parse complex, multi-line custom campus registration forms.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- TAB 3: Settings Hub View -->
+      <section id="tab-settings-hub" class="tab-panel">
+        <div class="settings-container" style="display: flex; gap: 0; background: #fff; border-radius: 20px; border: 1px solid var(--card-border); min-height: 620px; box-shadow: 0 4px 20px rgba(74,74,74,0.02); overflow: hidden; flex-wrap: wrap;">
+          <!-- Sub-Sidebar Navigation -->
+          <div class="settings-sub-sidebar" style="width: 240px; border-right: 1px solid var(--card-border); padding: 24px; flex-shrink: 0; background: #FFFBF7; display: flex; flex-direction: column; gap: 16px;">
+            <h3 style="font-size: 11px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1.2px; margin-bottom: 4px;">System Preferences</h3>
+            <ul style="list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 6px;">
+              <li class="settings-nav-item active" data-subtab="settings-general">⚙️ General</li>
+              <li class="settings-nav-item" data-subtab="settings-profile">👤 Profile Info</li>
+              <li class="settings-nav-item" data-subtab="settings-autofill">⚡ Autofill Prefs</li>
+              <li class="settings-nav-item" data-subtab="settings-notifications">🔔 Notifications</li>
+              <li class="settings-nav-item" data-subtab="settings-privacy">🔒 Privacy & Security</li>
+              <li class="settings-nav-item" data-subtab="settings-appearance">🎨 Appearance</li>
+              <li class="settings-nav-item" data-subtab="settings-extension">🔌 Browser Extension</li>
+              <li class="settings-nav-item" data-subtab="settings-ai">✨ AI & Gemini</li>
+              <li class="settings-nav-item" data-subtab="settings-data">📊 Data & Storage</li>
+              <li class="settings-nav-item" data-subtab="settings-account">💳 Account</li>
+            </ul>
+          </div>
+
+          <!-- Right-Side Settings Panels Viewport -->
+          <div style="flex: 1; min-width: 320px; padding: 36px 40px; overflow-y: auto; background: var(--card-bg);">
+            
+            <!-- SUB-TAB 1: General Settings -->
+            <div id="settings-general" class="settings-sub-panel active">
+              <h3 style="font-family: 'Space Grotesk', sans-serif; font-size: 20px; font-weight: 700; color: var(--text-main); margin-bottom: 6px;">General Preferences</h3>
+              <p style="font-size: 13.5px; color: var(--text-muted); margin-bottom: 24px;">Manage global configurations and automation habits.</p>
+              
+              <div class="form-group" style="margin-bottom: 20px;">
+                <label>Default Interface Language</label>
+                <select id="prefLanguage" style="width: 100%; max-width: 360px;">
+                  <option value="en">English (US/UK)</option>
+                  <option value="hi">Hindi (हिन्दी)</option>
+                  <option value="es">Other</option>
+                </select>
+              </div>
+
+              <div class="form-group" style="margin-bottom: 24px;">
+                <label>Startup Landing Page</label>
+                <select id="prefLanding" style="width: 100%; max-width: 360px;">
+                  <option value="dashboard">Dashboard Overview</option>
+                  <option value="profile">Student Profile Vault</option>
+                  <option value="reviews">Campus Reviews Vault</option>
+                </select>
+              </div>
+
+              <div style="display: flex; flex-direction: column; gap: 8px; max-width: 480px;">
+                <label class="switch-label">
+                  <span>Auto-save changes dynamically</span>
+                  <input type="checkbox" id="toggleAutosave" checked>
+                  <div class="switch-toggle-track"><div class="switch-toggle-thumb"></div></div>
+                </label>
+                <label class="switch-label">
+                  <span>Show confirm block before filling</span>
+                  <input type="checkbox" id="toggleConfirmAuto" checked>
+                  <div class="switch-toggle-track"><div class="switch-toggle-thumb"></div></div>
+                </label>
+                <label class="switch-label">
+                  <span>Show toast notifications on success</span>
+                  <input type="checkbox" id="toggleToasts" checked>
+                  <div class="switch-toggle-track"><div class="switch-toggle-thumb"></div></div>
+                </label>
+                <label class="switch-label">
+                  <span>Enable dashboard animations</span>
+                  <input type="checkbox" id="toggleAnimations" checked>
+                  <div class="switch-toggle-track"><div class="switch-toggle-thumb"></div></div>
+                </label>
+              </div>
+
+              <!-- Dynamic Form Sync Trigger -->
+              <div style="margin-top: 28px; padding-top: 20px; border-top: 1px solid var(--card-border); max-width: 480px;">
+                <h4 style="font-family: 'Space Grotesk', sans-serif; font-size: 15px; font-weight: 700; color: var(--text-main); margin-bottom: 6px;">Recurring Custom Forms</h4>
+                <p style="font-size: 12.5px; color: var(--text-muted); margin-bottom: 16px;">Create customized daily sync forms to automate repetitive personal or study trackers.</p>
+                <button class="btn btn-primary" id="newFormSyncBtn" style="padding: 10px 20px; font-weight: 600; display: inline-flex; align-items: center; gap: 8px;">
+                  ✨ New Form Sync
+                </button>
+              </div>
+            </div>
+
+            <!-- SUB-TAB 2: Profile Settings (Inline Original Profile Cards!) -->
+            <div id="settings-profile" class="settings-sub-panel">
+              <div id="profileLoadingOverlay">
+                <div class="profile-spinner"></div>
+                <p style="font-size: 13.5px; color: var(--text-muted); font-weight: 600;">Loading your profile...</p>
+              </div>
+              <h3 style="font-family: 'Space Grotesk', sans-serif; font-size: 20px; font-weight: 700; color: var(--text-main); margin-bottom: 6px;">Student Profile Vault</h3>
+              <p style="font-size: 13.5px; color: var(--text-muted); margin-bottom: 24px;">Manage identity credentials and core university records. Click the pencil buttons to unlock edit modes.</p>
+              
+              <div class="grid-2">
+                <!-- Card 1: Personal details -->
+                <div class="card" id="cardPersonalDetails">
+                  <div class="card-header">
+                    <div class="card-title">
+                      <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                      Personal details
+                    </div>
+                    <button class="edit-toggle-btn" data-target="cardPersonalDetails" aria-label="Edit Personal Details Card">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="#4A4A4A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+                    </button>
+                  </div>
+                  <div class="form-group">
+                    <label>Student name</label>
+                    <input type="text" id="fullName" placeholder="e.g., Alex Johnson" readonly>
+                  </div>
+                  <div class="form-row">
+                    <div class="form-group">
+                      <label>Date of birth</label>
+                      <input type="text" id="dob" placeholder="e.g., 14/08/2005" readonly>
+                    </div>
+                    <div class="form-group">
+                      <label>Contact Number</label>
+                      <input type="text" id="phoneNumber" placeholder="e.g., +1 555 123 4567" readonly>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label>Email ID (Personal)</label>
+                    <input type="email" id="personalEmail" placeholder="e.g., alex.j@gmail.com" readonly>
+                  </div>
+                </div>
+
+                <!-- Card 2: Family Information -->
+                <div class="card" id="cardFamilyInfo">
+                  <div class="card-header">
+                    <div class="card-title">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                      Family Information
+                    </div>
+                    <button class="edit-toggle-btn" data-target="cardFamilyInfo" aria-label="Edit Family Info Card">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="#4A4A4A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+                    </button>
+                  </div>
+                  <div class="form-group">
+                    <label>Father's Legal Name</label>
+                    <input type="text" id="parentName" placeholder="e.g., Michael Johnson" readonly>
+                  </div>
+                  <div class="form-group">
+                    <label>Mother's Legal Name</label>
+                    <input type="text" id="parentRelation" placeholder="e.g., Sarah Johnson" readonly>
+                  </div>
+                  <div class="form-row">
+                    <div class="form-group">
+                      <label>Guardian/Alternative Name</label>
+                      <input type="text" id="parentEmail" placeholder="e.g., Robert Johnson" readonly>
+                    </div>
+                    <div class="form-group">
+                      <label>Emergency Contact Number</label>
+                      <input type="text" id="parentPhone" placeholder="e.g., +1 987 654 3210" readonly>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Card 3: Contact Address Details -->
+                <div class="card card-span-2" id="cardContactDetails">
+                  <div class="card-header">
+                    <div class="card-title">
+                      <svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                      Contact Address Details
+                    </div>
+                    <button class="edit-toggle-btn" data-target="cardContactDetails" aria-label="Edit Address Details Card">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="#4A4A4A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+                    </button>
+                  </div>
+                  <div class="form-row">
+                    <div class="form-group">
+                      <label>Address line 1</label>
+                      <input type="text" id="address1" placeholder="e.g., 123 Maple Street" readonly>
+                    </div>
+                    <div class="form-group">
+                      <label>Address line 2</label>
+                      <input type="text" id="address2" placeholder="e.g., Apartment 4B" readonly>
+                    </div>
+                  </div>
+                  <div class="form-row">
+                    <div class="form-group">
+                      <label>Address line 3</label>
+                      <input type="text" id="address3" placeholder="e.g., Suite 101" readonly>
+                    </div>
+                    <div class="form-group">
+                      <label>Locality</label>
+                      <input type="text" id="locality" placeholder="e.g., Downtown District" readonly>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label>Landmark</label>
+                    <input type="text" id="landmark" placeholder="e.g., Next to City Library" readonly>
+                  </div>
+                </div>
+
+                <!-- Card 4: Academic Details -->
+                <div class="card card-span-2" id="cardAcademicDetails">
+                  <div class="card-header">
+                    <div class="card-title">
+                      <svg viewBox="0 0 24 24"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c0 2 2 3 6 3s6-1 6-3v-5"/></svg>
+                      Academic details
+                    </div>
+                    <button class="edit-toggle-btn" data-target="cardAcademicDetails" aria-label="Edit Academic Details Card">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="#4A4A4A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+                    </button>
+                  </div>
+                  <div class="form-row">
+                    <div class="form-group">
+                      <label>College/University Name</label>
+                      <input type="text" id="collegeName" placeholder="e.g., State University of Technology" readonly>
+                    </div>
+                    <div class="form-group">
+                      <label>Course Name</label>
+                      <input type="text" id="courseInfo" placeholder="e.g., Computer Science Engineering" readonly>
+                    </div>
+                  </div>
+                  <div class="form-row">
+                    <div class="form-group">
+                      <label>Degree preferences</label>
+                      <input type="text" id="degreePref" placeholder="e.g., B.Tech" readonly>
+                    </div>
+                    <div class="form-group">
+                      <label>Current Studying Year</label>
+                      <input type="text" id="studyingYear" placeholder="e.g., 2nd Year" readonly>
+                    </div>
+                  </div>
+                  <div class="form-row">
+                    <div class="form-group">
+                      <label>Graduation year /Batch</label>
+                      <input type="text" id="gradYear" placeholder="e.g., 2027" readonly>
+                    </div>
+                    <div class="form-group">
+                      <label>Section/Batch/Group</label>
+                      <input type="text" id="batchSection" placeholder="e.g., Batch A" readonly>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Card 5: Campus credentials -->
+                <div class="card card-span-2" id="cardCredentials">
+                  <div class="card-header">
+                    <div class="card-title">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-credit-card"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+                      Campus credentials & IDs
+                    </div>
+                    <button class="edit-toggle-btn" data-target="cardCredentials" aria-label="Edit Credentials Card">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="#4A4A4A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+                    </button>
+                  </div>
+                  <div class="form-row">
+                    <div class="form-group">
+                      <label>Registration Number</label>
+                      <input type="text" id="regNo" placeholder="e.g., 26BCS10220" readonly>
+                    </div>
+                    <div class="form-group">
+                      <label>Roll Number</label>
+                      <input type="text" id="rollNo" placeholder="e.g., 10220" readonly>
+                    </div>
+                  </div>
+                  <div class="form-row">
+                    <div class="form-group">
+                      <label>College Email ID</label>
+                      <input type="email" id="collegeEmail" placeholder="e.g., alex.j@university.edu" readonly>
+                    </div>
+                    <div class="form-group">
+                      <label>Numeric Roll (Fallback)</label>
+                      <input type="text" id="numericRoll" placeholder="e.g., 10220" readonly>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Inline Settings Save Action -->
+              <div style="display: flex; justify-content: flex-end; gap: 12px; margin-top: 24px;">
+                <button class="btn btn-secondary" id="profileCancelBtn" style="padding: 10px 20px;">Cancel Changes</button>
+                <button class="btn btn-primary" id="profileSaveBtn" style="padding: 10px 24px;">💾 Save Profile</button>
+              </div>
+            </div>
+
+            <!-- SUB-TAB 3: Autofill Preferences -->
+            <div id="settings-autofill" class="settings-sub-panel">
+              <h3 style="font-family: 'Space Grotesk', sans-serif; font-size: 20px; font-weight: 700; color: var(--text-main); margin-bottom: 6px;">Autofill Preferences</h3>
+              <p style="font-size: 13.5px; color: var(--text-muted); margin-bottom: 24px;">Fine-tune your automated helper characteristics.</p>
+              
+              <div style="display: flex; flex-direction: column; gap: 8px; max-width: 480px; margin-bottom: 24px;">
+                <label class="switch-label">
+                  <span>Enable Campus Copilot Autofill</span>
+                  <input type="checkbox" id="toggleAutofillEnabled" checked>
+                  <div class="switch-toggle-track"><div class="switch-toggle-thumb"></div></div>
+                </label>
+                <label class="switch-label">
+                  <span>Show Autofill Assistant Badge</span>
+                  <input type="checkbox" id="toggleAssistantBadge" checked>
+                  <div class="switch-toggle-track"><div class="switch-toggle-thumb"></div></div>
+                </label>
+                <label class="switch-label">
+                  <span>Automatically detect campus forms</span>
+                  <input type="checkbox" id="toggleAutoDetect" checked>
+                  <div class="switch-toggle-track"><div class="switch-toggle-thumb"></div></div>
+                </label>
+                <label class="switch-label">
+                  <span>Ask confirmation before filling sensitive fields</span>
+                  <input type="checkbox" id="toggleConfirmSensitive" checked>
+                  <div class="switch-toggle-track"><div class="switch-toggle-thumb"></div></div>
+                </label>
+                <label class="switch-label">
+                  <span>Allow AI semantic synonym matching</span>
+                  <input type="checkbox" id="toggleSemanticMatching" checked>
+                  <div class="switch-toggle-track"><div class="switch-toggle-thumb"></div></div>
+                </label>
+                <label class="switch-label">
+                  <span>Show confidence scores</span>
+                  <input type="checkbox" id="toggleShowConfidence" checked>
+                  <div class="switch-toggle-track"><div class="switch-toggle-thumb"></div></div>
+                </label>
+              </div>
+
+              <!-- Warning Alert Banner -->
+              <div style="background-color: rgba(250, 177, 160, 0.15); border: 1.5px solid var(--accent-rose, #FAB1A0); color: var(--text-main); padding: 16px 20px; border-radius: 12px; font-size: 13px; line-height: 1.5; max-width: 520px; margin-bottom: 28px;">
+                <strong>⚠️ Sensitive Fields Confirmation Warning</strong><br>
+                Sensitive fields such as phone number, address, and student identification details will always require your explicit approval before being auto-filled.
+              </div>
+
+              <button class="btn btn-secondary" id="resetAutofillBtn" style="padding: 10px 20px; color: #FF7675; border-color: rgba(255, 118, 117, 0.3);">Reset Autofill Preferences</button>
+            </div>
+
+            <!-- SUB-TAB 4: Notification Settings -->
+            <div id="settings-notifications" class="settings-sub-panel">
+              <h3 style="font-family: 'Space Grotesk', sans-serif; font-size: 20px; font-weight: 700; color: var(--text-main); margin-bottom: 6px;">Notification Preferences</h3>
+              <p style="font-size: 13.5px; color: var(--text-muted); margin-bottom: 24px;">Configure which background events trigger push alerts.</p>
+              
+              <div style="display: flex; flex-direction: column; gap: 8px; max-width: 480px;">
+                <label class="switch-label">
+                  <span>Alert when form completes successfully</span>
+                  <input type="checkbox" id="toggleAlertFormSuccess" checked>
+                  <div class="switch-toggle-track"><div class="switch-toggle-thumb"></div></div>
+                </label>
+                <label class="switch-label">
+                  <span>Alert when autofill option is available</span>
+                  <input type="checkbox" id="toggleAlertAutofillAvail" checked>
+                  <div class="switch-toggle-track"><div class="switch-toggle-thumb"></div></div>
+                </label>
+                <label class="switch-label">
+                  <span>Alert when missing details are detected</span>
+                  <input type="checkbox" id="toggleAlertMissingInfo" checked>
+                  <div class="switch-toggle-track"><div class="switch-toggle-thumb"></div></div>
+                </label>
+                <label class="switch-label">
+                  <span>Alert on low-confidence matching scores</span>
+                  <input type="checkbox" id="toggleAlertLowConfidence" checked>
+                  <div class="switch-toggle-track"><div class="switch-toggle-thumb"></div></div>
+                </label>
+                <label class="switch-label">
+                  <span>Notify extension connection updates</span>
+                  <input type="checkbox" id="toggleAlertConnection" checked>
+                  <div class="switch-toggle-track"><div class="switch-toggle-thumb"></div></div>
+                </label>
+                <label class="switch-label">
+                  <span>Show deadline reminders from parsed forms</span>
+                  <input type="checkbox" id="toggleAlertDeadlines" checked>
+                  <div class="switch-toggle-track"><div class="switch-toggle-thumb"></div></div>
+                </label>
+              </div>
+            </div>
+
+            <!-- SUB-TAB 5: Privacy & Security (Holds Passcode Controls too!) -->
+            <div id="settings-privacy" class="settings-sub-panel">
+              <h3 style="font-family: 'Space Grotesk', sans-serif; font-size: 20px; font-weight: 700; color: var(--text-main); margin-bottom: 6px;">Privacy & Security</h3>
+              <p style="font-size: 13.5px; color: var(--text-muted); margin-bottom: 24px;">Manage student record accessibility, clear logs, and locks.</p>
+              
+              <!-- Passcode Lock Configuration -->
+              <div class="card" style="margin-bottom: 24px; max-width: 520px;">
+                <div class="card-header" style="margin-bottom: 12px; padding-bottom: 8px;">
+                  <div class="card-title" style="color: var(--mint-green);">🔒 Security Passcode Lock</div>
+                </div>
+                <div class="form-group">
+                  <label>Current Security Passcode</label>
+                  <input type="password" id="currentPasscode" placeholder="Enter security passcode (default admin123)" style="max-width: 320px;">
+                </div>
+                <div class="form-group">
+                  <label>New Security Passcode</label>
+                  <input type="password" id="newPasscode" placeholder="Enter new passcode" style="max-width: 320px;">
+                </div>
+                <button class="btn btn-primary" id="savePasscodeBtn" style="padding: 8px 18px; font-size: 12.5px;">Update Passcode</button>
+              </div>
+
+              <!-- Permissions Grid -->
+              <div class="card" style="margin-bottom: 28px; max-width: 520px;">
+                <div class="card-header" style="margin-bottom: 12px; padding-bottom: 8px;">
+                  <div class="card-title">🛡️ App Permissions</div>
+                </div>
+                <div style="display: flex; flex-direction: column; gap: 12px;">
+                  <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(74,74,74,0.06); padding-bottom: 8px;">
+                    <span style="font-size: 13.5px; font-weight: 600; color: var(--text-main);">Access Profile Information</span>
+                    <span style="color: var(--mint-green); font-weight: 700;">✓ Allowed</span>
+                  </div>
+                  <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(74,74,74,0.06); padding-bottom: 8px;">
+                    <span style="font-size: 13.5px; font-weight: 600; color: var(--text-main);">Interact with Form Fields</span>
+                    <span style="color: var(--mint-green); font-weight: 700;">✓ Allowed</span>
+                  </div>
+                  <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(74,74,74,0.06); padding-bottom: 8px;">
+                    <span style="font-size: 13.5px; font-weight: 600; color: var(--text-main);">Inject Browser Extension CSS</span>
+                    <span style="color: var(--mint-green); font-weight: 700;">✓ Allowed</span>
+                  </div>
+                  <div style="display: flex; justify-content: space-between; align-items: center; padding-bottom: 4px;">
+                    <span style="font-size: 13.5px; font-weight: 600; color: var(--text-main);">Connect to Google Gemini AI API</span>
+                    <span style="color: var(--mint-green); font-weight: 700;">✓ Allowed</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Destructive Actions -->
+              <div style="display: flex; gap: 12px; flex-wrap: wrap;">
+                <button class="btn btn-secondary" id="clearLocalDataBtn" style="padding: 10px 18px;">Clear Local Data</button>
+                <button class="btn btn-secondary" id="exportDataBtn" style="padding: 10px 18px;">Export My Data</button>
+                <button class="btn btn-primary" id="resetAllDataBtn" style="padding: 10px 20px; background: #FF7675; border-color: #FF7675; box-shadow: 0 4px 12px rgba(255, 118, 117, 0.25);">Reset All Data</button>
+              </div>
+            </div>
+
+            <!-- SUB-TAB 6: Appearance Settings -->
+            <div id="settings-appearance" class="settings-sub-panel">
+              <h3 style="font-family: 'Space Grotesk', sans-serif; font-size: 20px; font-weight: 700; color: var(--text-main); margin-bottom: 6px;">Appearance Settings</h3>
+              <p style="font-size: 13.5px; color: var(--text-muted); margin-bottom: 24px;">Personalize layout themes, accent colors, and densities.</p>
+              
+              <!-- Theme Options -->
+              <div class="form-group" style="margin-bottom: 24px;">
+                <label>Interface Theme Mode</label>
+                <div style="display: flex; gap: 12px;">
+                  <label style="flex: 1; text-align: center; padding: 14px; background: rgba(74,74,74,0.02); border: 1.5px solid var(--card-border); border-radius: 12px; cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 6px;" class="theme-option-card">
+                    <input type="radio" name="themeSelect" value="light" checked style="display:none;">
+                    <span style="font-size: 20px;">☀️</span>
+                    <span style="font-size: 13px; font-weight: 700; color: var(--text-main);">Light Theme</span>
+                  </label>
+                  <label style="flex: 1; text-align: center; padding: 14px; background: rgba(74,74,74,0.02); border: 1.5px solid var(--card-border); border-radius: 12px; cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 6px;" class="theme-option-card">
+                    <input type="radio" name="themeSelect" value="dark" style="display:none;">
+                    <span style="font-size: 20px;">🌙</span>
+                    <span style="font-size: 13px; font-weight: 700; color: var(--text-main);">Dark Theme</span>
+                  </label>
+                  <label style="flex: 1; text-align: center; padding: 14px; background: rgba(74,74,74,0.02); border: 1.5px solid var(--card-border); border-radius: 12px; cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 6px;" class="theme-option-card">
+                    <input type="radio" name="themeSelect" value="system" style="display:none;">
+                    <span style="font-size: 20px;">🖥️</span>
+                    <span style="font-size: 13px; font-weight: 700; color: var(--text-main);">System Default</span>
+                  </label>
+                </div>
+              </div>
+
+              <!-- Accent Color -->
+              <div class="form-group" style="margin-bottom: 24px;">
+                <label>Brand Accent Color</label>
+                <div style="display: flex; gap: 10px;">
+                  <button class="btn accent-color-btn active" data-accent="default" style="width:36px; height:36px; border-radius:50%; background: #2A9D8F; border: 2px solid var(--text-main); padding:0; min-width:unset;"></button>
+                  <button class="btn accent-color-btn" data-accent="indigo" style="width:36px; height:36px; border-radius:50%; background: #4F46E5; border: 2px solid transparent; padding:0; min-width:unset;"></button>
+                  <button class="btn accent-color-btn" data-accent="teal" style="width:36px; height:36px; border-radius:50%; background: #0D9488; border: 2px solid transparent; padding:0; min-width:unset;"></button>
+                  <button class="btn accent-color-btn" data-accent="purple" style="width:36px; height:36px; border-radius:50%; background: #9333EA; border: 2px solid transparent; padding:0; min-width:unset;"></button>
+                </div>
+              </div>
+
+              <!-- Density Select -->
+              <div class="form-group">
+                <label>Interface Padding Density</label>
+                <div style="display: flex; gap: 12px; max-width: 320px;">
+                  <button class="btn btn-primary density-btn active" data-density="comfortable" style="flex:1; padding: 10px 14px; font-size:12.5px;">Comfortable</button>
+                  <button class="btn btn-secondary density-btn" data-density="compact" style="flex:1; padding: 10px 14px; font-size:12.5px;">Compact</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- SUB-TAB 7: Browser Extension Connection -->
+            <div id="settings-extension" class="settings-sub-panel">
+              <h3 style="font-family: 'Space Grotesk', sans-serif; font-size: 20px; font-weight: 700; color: var(--text-main); margin-bottom: 6px;">Browser Extension</h3>
+              <p style="font-size: 13.5px; color: var(--text-muted); margin-bottom: 24px;">Configure Chrome extension bridges and background sync loops.</p>
+              
+              <div class="card" style="margin-bottom: 24px; max-width: 520px; border-color: rgba(74,74,74,0.15);">
+                <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px;">
+                  <span style="font-size: 14px; font-weight: 700; color: var(--text-main);">Extension connection status</span>
+                  <span class="import-badge" id="extStatusLabel" style="background-color: rgba(250, 177, 160, 0.15); color: #E17055; padding: 4px 12px; border-radius: 99px; font-size: 11px; font-weight: 700;">Not Connected</span>
+                </div>
+                <p style="font-size: 13px; color: var(--text-muted); line-height: 1.5; margin-bottom: 0;">
+                  Extension connection is not available in this development server viewport. To load, import this folder directory into Chrome via developer options.
+                </p>
+              </div>
+
+              <div style="display: flex; gap: 12px; flex-wrap: wrap;">
+                <button class="btn btn-primary" id="connectExtBtn" style="padding: 10px 18px;">Connect Extension</button>
+                <button class="btn btn-secondary" id="disconnectExtBtn" style="padding: 10px 18px;">Disconnect Extension</button>
+                <button class="btn btn-secondary" id="testConnBtn" style="padding: 10px 18px;">Test Connection</button>
+              </div>
+            </div>
+
+            <!-- SUB-TAB 8: AI & Gemini API Settings (Holds Gemini API card!) -->
+            <div id="settings-ai" class="settings-sub-panel">
+              <h3 style="font-family: 'Space Grotesk', sans-serif; font-size: 20px; font-weight: 700; color: var(--text-main); margin-bottom: 6px;">AI & Gemini Engine</h3>
+              <p style="font-size: 13.5px; color: var(--text-muted); margin-bottom: 24px;">Configure target LLM models and fine-tune semantic matching parameters.</p>
+              
+              <div class="grid-2">
+                <!-- Gemini API Card -->
+                <div class="card">
+                  <div class="card-header">
+                    <div class="card-title">
+                      <svg viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+                      Gemini API Configuration
+                    </div>
+                    <span id="apiStatus" style="font-size:12px; font-weight:700;"></span>
+                  </div>
+                  <div class="form-group">
+                    <label>Gemini API Key</label>
+                    <div style="display:flex; gap:8px;">
+                      <input type="password" id="geminiApiKey" placeholder="Enter API Key from Google AI Studio">
+                      <button id="testApiKeyBtn" class="btn btn-secondary" style="padding: 10px 14px; font-size: 12px;">Test Connection</button>
+                    </div>
+                    <span style="font-size: 11px; color: var(--text-muted); margin-top: 4px; display: block;">API Keys are stored securely in local browser storage.</span>
+                  </div>
+                  <div class="form-group">
+                    <label>Target LLM Engine</label>
+                    <select id="modelSelect">
+                      <option value="models/gemini-3.6-flash">Gemini 3.6 Flash (Fastest & Production-Ready)</option>
+                    </select>
+                  </div>
+                </div>
+
+                <!-- Tone Settings Card -->
+                <div class="card">
+                  <div class="card-header">
+                    <div class="card-title">🌟 General Sentiment & Tone Slider</div>
+                    <span id="sentimentValue" style="color:var(--accent-cyan); font-weight:800;">4 / 5</span>
+                  </div>
+                  <div class="form-group">
+                    <label>Default Form Response Tone</label>
+                    <input type="range" id="sentimentSlider" min="1" max="5" value="4">
+                  </div>
+                  <div class="form-group">
+                    <label>General Feedback Note</label>
+                    <textarea id="sentimentNotes" rows="3" placeholder="Facilities, academic pacing, and campus ecosystem are well-structured."></textarea>
+                  </div>
+                </div>
+              </div>
+
+              <!-- AI settings toggles -->
+              <div style="display: flex; flex-direction: column; gap: 8px; max-width: 480px; margin-top: 24px; margin-bottom: 24px;">
+                <label class="switch-label">
+                  <span>AI Form Matching Engine</span>
+                  <input type="checkbox" id="toggleAiFormMatching" checked>
+                  <div class="switch-toggle-track"><div class="switch-toggle-thumb"></div></div>
+                </label>
+                <label class="switch-label">
+                  <span>AI Semantic Matching</span>
+                  <input type="checkbox" id="toggleAiSemantic" checked>
+                  <div class="switch-toggle-track"><div class="switch-toggle-thumb"></div></div>
+                </label>
+                <label class="switch-label">
+                  <span>Confidence Analysis Engine</span>
+                  <input type="checkbox" id="toggleAiConfidence" checked>
+                  <div class="switch-toggle-track"><div class="switch-toggle-thumb"></div></div>
+                </label>
+                <label class="switch-label">
+                  <span>Show Smart Suggestions</span>
+                  <input type="checkbox" id="toggleAiSuggestions" checked>
+                  <div class="switch-toggle-track"><div class="switch-toggle-thumb"></div></div>
+                </label>
+              </div>
+
+              <div class="form-group" style="max-width: 320px;">
+                <label>AI Processing Mode</label>
+                <select id="selectAiMode">
+                  <option value="fast">Fast (Lower Latency)</option>
+                  <option value="balanced" selected>Balanced (Standard)</option>
+                  <option value="accurate">Accurate (Thorough Parse)</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- SUB-TAB 9: Data & Storage Settings -->
+            <div id="settings-data" class="settings-sub-panel">
+              <h3 style="font-family: 'Space Grotesk', sans-serif; font-size: 20px; font-weight: 700; color: var(--text-main); margin-bottom: 6px;">Data & Storage</h3>
+              <p style="font-size: 13.5px; color: var(--text-muted); margin-bottom: 24px;">Export backups, load configuration tables, or wipe profile fields.</p>
+              
+              <div class="card" style="margin-bottom: 24px; max-width: 520px;">
+                <div class="card-header" style="margin-bottom: 12px; padding-bottom: 8px;">
+                  <div class="card-title">📊 Storage Utilization Metrics</div>
+                </div>
+                <div style="display: flex; flex-direction: column; gap: 10px; font-size: 13.5px;">
+                  <div style="display:flex; justify-content:space-between;"><span style="color: var(--text-muted);">Profile Fields Stored:</span><strong style="color: var(--text-main);" id="storeFieldsCount">24 Fields</strong></div>
+                  <div style="display:flex; justify-content:space-between;"><span style="color: var(--text-muted);">Forms Processed:</span><strong style="color: var(--text-main);" id="storeFormsCount">12 Forms</strong></div>
+                  <div style="display:flex; justify-content:space-between;"><span style="color: var(--text-muted);">Autofill Operations:</span><strong style="color: var(--text-main);" id="storeAutofillCount">186 Executions</strong></div>
+                  <div style="display:flex; justify-content:space-between;"><span style="color: var(--text-muted);">Total Size Occupied:</span><strong style="color: var(--text-main);">4.2 KB (Local Storage)</strong></div>
+                </div>
+              </div>
+
+              <div style="display: flex; gap: 12px; flex-wrap: wrap;">
+                <button class="btn btn-secondary" id="dataExportBtn">Export JSON Data</button>
+                <button class="btn btn-secondary" id="dataImportBtn">Import JSON Data</button>
+                <button class="btn btn-secondary" id="clearHistoryBtn" style="color: #FF7675; border-color: rgba(255, 118, 117, 0.2);">Clear Form History</button>
+                <button class="btn btn-secondary" id="clearProfileBtn" style="color: #FF7675; border-color: rgba(255, 118, 117, 0.2);">Clear Profile Data</button>
+              </div>
+            </div>
+
+            <!-- SUB-TAB 10: Account Settings -->
+            <div id="settings-account" class="settings-sub-panel">
+              <h3 style="font-family: 'Space Grotesk', sans-serif; font-size: 20px; font-weight: 700; color: var(--text-main); margin-bottom: 6px;">Account Settings</h3>
+              <p style="font-size: 13.5px; color: var(--text-muted); margin-bottom: 24px;">Manage connected accounts, memberships, and session parameters.</p>
+              
+              <div class="card" style="margin-bottom: 24px; max-width: 520px; display: flex; align-items: center; gap: 20px;">
+                <div class="avatar-wrapper edit-avatar-trigger" aria-label="Change profile picture" title="Change profile picture" style="width: 64px; height: 64px;">
+                  <img id="accUserAvatar" src="https://lh3.googleusercontent.com/a/default-user" alt="Avatar" style="width: 64px; height: 64px; border-radius: 50%; border: 2px solid var(--text-main); object-fit: cover;">
+                  <div class="avatar-pencil-overlay">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M12 20h9M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/>
+                    </svg>
+                  </div>
+                </div>
+                <div>
+                  <h4 style="font-family: 'Space Grotesk', sans-serif; font-size: 16px; font-weight: 700; color: var(--text-main); margin-bottom: 2px;" id="accUserNameText">Amit Sharma</h4>
+                  <p style="font-size: 13.5px; color: var(--text-muted); margin-bottom: 6px;" id="accUserEmailText">amit@example.com</p>
+                  <span class="import-badge" style="background-color: rgba(42, 157, 143, 0.1); color: var(--mint-green); padding: 2px 10px; border-radius: 99px; font-size: 11px; font-weight: 700; display: inline-block;">Student Account Status: Verified</span>
+                </div>
+              </div>
+
+              <div style="display: flex; gap: 12px;">
+                <button class="btn btn-secondary" id="accEditProfileBtn">Edit Profile</button>
+                <button class="btn btn-primary" id="accSignOutBtn" style="background: #FF7675; border-color: #FF7675; box-shadow: 0 4px 12px rgba(255, 118, 117, 0.25);">Sign Out</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- TAB 4: Reviews Vault Tab (Original Campus Reviews preserved!) -->
+      <section id="tab-reviews-hub" class="tab-panel">
         <div class="grid-2">
           <!-- Hostel Feedback -->
           <div class="card">
@@ -458,61 +2108,286 @@
             </div>
           </div>
         </div>
+        <div style="display: flex; justify-content: flex-end; gap: 12px; margin-top: 24px; margin-bottom: 24px;">
+          <button class="btn btn-secondary" id="reviewsCancelBtn" style="padding: 10px 20px;">Cancel Changes</button>
+          <button class="btn btn-primary" id="reviewsSaveBtn" style="padding: 10px 24px;">💾 Save Reviews</button>
+        </div>
       </section>
 
-      <!-- TAB 4: AI Engine & Settings -->
-      <section id="tab-settings" class="tab-panel">
+      <!-- TAB 5: About View -->
+      <section id="tab-about" class="tab-panel">
+        <div class="card" style="margin-bottom: 24px; padding: 32px; background: linear-gradient(135deg, rgba(42,157,143,0.06), rgba(250,177,160,0.03)); text-align: center; border-color: var(--mint-green);">
+          <div style="font-size: 40px; margin-bottom: 12px;">🛫</div>
+          <h3 style="font-family: 'Space Grotesk', sans-serif; font-size: 26px; font-weight: 700; color: var(--text-main); margin-bottom: 8px;">Meet Campus Copilot</h3>
+          <p style="font-size: 15px; color: var(--text-muted); max-width: 600px; margin: 0 auto 16px; line-height: 1.5;">Campus Copilot is an AI-powered student productivity assistant designed to eliminate repetitive form filling and simplify everyday campus tasks.</p>
+          <span class="import-badge" style="background: rgba(42,157,143,0.1); color: var(--mint-green); font-size: 12px; padding: 6px 16px; border-radius: 99px; font-weight: 700;">Built for students, by students.</span>
+        </div>
+
         <div class="grid-2">
+          <!-- Column 1: The Problem -->
           <div class="card">
-            <div class="card-header">
-              <div class="card-title">
-                <svg viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
-                Google Gemini API Configuration
-              </div>
-              <span id="apiStatus" style="font-size:12px; font-weight:700;"></span>
-            </div>
-            <div class="form-group">
-              <label>Gemini API Key</label>
-              <div style="display:flex; gap:8px;">
-                <input type="password" id="geminiApiKey" placeholder="Enter API Key from Google AI Studio">
-                <button id="testApiKeyBtn" class="btn btn-secondary">Test Connection</button>
-              </div>
-            </div>
-            <div class="form-group">
-              <label>Target LLM Engine</label>
-              <select id="modelSelect">
-                <option value="models/gemini-3.6-flash">Gemini 3.6 Flash (Fastest & Production-Ready)</option>
-              </select>
-            </div>
+            <h4 style="font-family: 'Space Grotesk', sans-serif; font-size: 16px; font-weight: 700; color: var(--text-main); margin-bottom: 12px; display: flex; align-items: center; gap: 8px;">❌ The Problem</h4>
+            <p style="font-size: 13.5px; color: var(--text-muted); line-height: 1.5; margin-bottom: 14px;">
+              College life involves an endless cycle of entering the exact same identity, contact, academic, and parent details over and over again on:
+            </p>
+            <ul style="padding-left: 20px; font-size: 13.5px; color: var(--text-muted); display: flex; flex-direction: column; gap: 6px; line-height: 1.4;">
+              <li>Google Forms & registration links</li>
+              <li>College event registrations & TechFests</li>
+              <li>Wi-Fi/Mess review & feedback checklists</li>
+              <li>Scholarship and internship application drafts</li>
+            </ul>
           </div>
 
+          <!-- Column 2: The Solution -->
           <div class="card">
-            <div class="card-header">
-              <div class="card-title">🌟 General Sentiment & Tone Slider</div>
-              <span id="sentimentValue" style="color:var(--accent-cyan); font-weight:800;">4 / 5</span>
+            <h4 style="font-family: 'Space Grotesk', sans-serif; font-size: 16px; font-weight: 700; color: var(--text-main); margin-bottom: 12px; display: flex; align-items: center; gap: 8px;">🚀 The Solution</h4>
+            <p style="font-size: 13.5px; color: var(--text-muted); line-height: 1.5; margin-bottom: 14px;">
+              Campus Copilot securely stores your student information locally. Using Gemini API semantic mapping, it matches custom text fields to corresponding profile data instantly.
+            </p>
+            <ul style="padding-left: 20px; font-size: 13.5px; color: var(--text-muted); display: flex; flex-direction: column; gap: 6px; line-height: 1.4;">
+              <li>100% Client-Side Encryption</li>
+              <li>Synonym resolution & confidence checkmarks</li>
+              <li>Dictate and auto-generate text fields</li>
+              <li>Always keeps you in control before submission</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- How It Works Step Timeline -->
+        <div class="card" style="margin-top: 24px;">
+          <h4 style="font-family: 'Space Grotesk', sans-serif; font-size: 16px; font-weight: 700; color: var(--text-main); margin-bottom: 24px;">How It Works</h4>
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 20px; text-align: center;">
+            <div style="display: flex; flex-direction: column; align-items: center;">
+              <span style="width: 32px; height: 32px; border-radius: 50%; background: var(--mint-green); color: #fff; font-size: 14px; font-weight: 700; display: flex; align-items: center; justify-content: center; margin-bottom: 8px;">1</span>
+              <h5 style="font-size: 14px; font-weight: 700; color: var(--text-main); margin-bottom: 4px;">Build Profile</h5>
+              <p style="font-size: 12px; color: var(--text-muted);">Enter information inside settings.</p>
             </div>
-            <div class="form-group">
-              <label>Default Form Response Tone</label>
-              <input type="range" id="sentimentSlider" min="1" max="5" value="4">
+            <div style="display: flex; flex-direction: column; align-items: center;">
+              <span style="width: 32px; height: 32px; border-radius: 50%; background: var(--mint-green); color: #fff; font-size: 14px; font-weight: 700; display: flex; align-items: center; justify-content: center; margin-bottom: 8px;">2</span>
+              <h5 style="font-size: 14px; font-weight: 700; color: var(--text-main); margin-bottom: 4px;">Open Form</h5>
+              <p style="font-size: 12px; color: var(--text-muted);">Navigate to any Google Form.</p>
             </div>
-            <div class="form-group">
-              <label>General Feedback Note</label>
-              <textarea id="sentimentNotes" rows="3" placeholder="Facilities, academic pacing, and campus ecosystem are well-structured."></textarea>
+            <div style="display: flex; flex-direction: column; align-items: center;">
+              <span style="width: 32px; height: 32px; border-radius: 50%; background: var(--mint-green); color: #fff; font-size: 14px; font-weight: 700; display: flex; align-items: center; justify-content: center; margin-bottom: 8px;">3</span>
+              <h5 style="font-size: 14px; font-weight: 700; color: var(--text-main); margin-bottom: 4px;">AI Parsing</h5>
+              <p style="font-size: 12px; color: var(--text-muted);">Copilot parses fields semantically.</p>
+            </div>
+            <div style="display: flex; flex-direction: column; align-items: center;">
+              <span style="width: 32px; height: 32px; border-radius: 50%; background: var(--mint-green); color: #fff; font-size: 14px; font-weight: 700; display: flex; align-items: center; justify-content: center; margin-bottom: 8px;">4</span>
+              <h5 style="font-size: 14px; font-weight: 700; color: var(--text-main); margin-bottom: 4px;">Review & Submit</h5>
+              <p style="font-size: 12px; color: var(--text-muted);">Review matching and approve fill.</p>
             </div>
           </div>
         </div>
       </section>
 
-      <!-- Persistent Global Sync Action Bar -->
-      <div class="sync-footer">
-        <button id="saveBtn" class="btn btn-primary" style="padding: 12px 28px; font-size:14px;">
-          💾 Save Profile & Sync Context
-        </button>
+      <!-- Toast Containers & Backdrop Modals -->
+      <div class="toast-container" id="toastContainer" style="position: fixed; bottom: 28px; right: 28px; display: flex; flex-direction: column; gap: 10px; z-index: 10000; pointer-events: none;"></div>
+
+      <!-- Backdrop blurred modal popup system -->
+      <div class="modal-backdrop" id="modalBackdrop" style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(74,74,74,0.4); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); display: none; align-items: center; justify-content: center; z-index: 10005;">
+        <div class="modal-card" style="background: #fff; border: 1px solid var(--card-border); border-radius: 20px; padding: 32px; width: 100%; max-width: 440px; box-shadow: 0 20px 50px rgba(0,0,0,0.1); text-align: center;">
+          <h3 id="modalTitle" style="font-family: 'Space Grotesk', sans-serif; font-size: 18px; font-weight: 700; margin-bottom: 12px; color: var(--text-main);">Confirm Action</h3>
+          <p id="modalMessage" style="font-size: 14px; color: var(--text-muted); margin-bottom: 24px;">Are you sure?</p>
+          <div style="display: flex; gap: 12px; justify-content: center;">
+            <button class="btn btn-secondary" id="modalCancelBtn" style="padding: 10px 20px;">Cancel</button>
+            <button class="btn btn-primary" id="modalConfirmBtn" style="padding: 10px 20px; background: #FF7675; border-color: #FF7675; box-shadow: none;">Confirm</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Profile Picture / Avatar Editor Modal -->
+      <div class="modal-backdrop" id="avatarEditorModal" style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(74,74,74,0.4); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); display: none; align-items: center; justify-content: center; z-index: 10010;">
+        <div class="modal-card" style="background: #fff; border: 1px solid var(--card-border); border-radius: 20px; padding: 28px; width: 100%; max-width: 500px; box-shadow: 0 20px 50px rgba(0,0,0,0.1); text-align: left; display: flex; flex-direction: column; gap: 16px;">
+          <div>
+            <h3 style="font-family: 'Space Grotesk', sans-serif; font-size: 18px; font-weight: 700; margin-bottom: 4px; color: var(--text-main);">Profile Picture</h3>
+            <p style="font-size: 13px; color: var(--text-muted);">Choose an avatar or upload your own photo.</p>
+          </div>
+
+          <!-- Segmented Tab Controls -->
+          <div class="segmented-control">
+            <button class="segmented-btn active" id="tabChooseAvatarBtn">Choose Avatar</button>
+            <button class="segmented-btn" id="tabUploadPhotoBtn">Upload Photo</button>
+          </div>
+
+          <!-- Content Zone 1: Choose Avatar Library -->
+          <div id="avatarLibraryView" style="display: flex; flex-direction: column; gap: 14px;">
+            <div class="avatar-filter-container">
+              <input type="text" class="avatar-search-input" id="avatarSearchInput" placeholder="Search avatars (e.g. cat, tree, space)...">
+              <div class="avatar-categories-bar" id="avatarCategoriesBar">
+                <span class="avatar-cat-tag active" data-category="all">All</span>
+                <span class="avatar-cat-tag" data-category="nature">Nature</span>
+                <span class="avatar-cat-tag" data-category="animals">Animals</span>
+                <span class="avatar-cat-tag" data-category="food">Food</span>
+                <span class="avatar-cat-tag" data-category="space">Space</span>
+                <span class="avatar-cat-tag" data-category="tech">Tech</span>
+                <span class="avatar-cat-tag" data-category="cartoon">Cartoon</span>
+                <span class="avatar-cat-tag" data-category="minimal">Minimal</span>
+                <span class="avatar-cat-tag" data-category="professional">Professional</span>
+              </div>
+            </div>
+            <!-- Predefined Avatars Grid -->
+            <div class="avatar-grid" id="avatarGridContainer">
+              <!-- Grid items populated dynamically -->
+            </div>
+          </div>
+
+          <!-- Content Zone 2: Custom Upload & Cropping -->
+          <div id="avatarUploadView" style="display: none; flex-direction: column; gap: 16px;">
+            <div class="avatar-upload-zone" id="avatarUploadZone">
+              <div class="avatar-upload-icon">📤</div>
+              <div class="avatar-upload-text">Upload your photo</div>
+              <div class="avatar-upload-subtext">PNG, JPG or WEBP — Max 5MB</div>
+              <input type="file" id="avatarFileInput" accept="image/png, image/jpeg, image/jpg, image/webp" style="display: none;">
+            </div>
+            <!-- Simple Zoom & Translate Position Cropper -->
+            <div class="avatar-crop-container" id="avatarCropContainer">
+              <div class="avatar-crop-viewport" id="avatarCropViewport">
+                <img src="" class="avatar-crop-image" id="avatarCropImage" alt="Upload Preview">
+              </div>
+              <p style="font-size: 11.5px; color: var(--text-muted); text-align: center;">Drag the image above to center. Zoom below to crop.</p>
+              <div class="avatar-crop-controls">
+                <span style="font-size:12px; margin-right:4px;">➖</span>
+                <input type="range" id="cropZoomSlider" min="1" max="3" step="0.05" value="1" style="flex:1;">
+                <span style="font-size:12px; margin-left:4px;">➕</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Footer Actions Row -->
+          <div style="display: flex; align-items: center; justify-content: space-between; margin-top: 10px; border-top: 1px solid rgba(74,74,74,0.08); padding-top: 18px;">
+            <button class="btn btn-secondary" id="avatarRemoveBtn" style="color: #FF7675; border-color: rgba(255,118,117,0.25); padding: 10px 16px;">Remove Photo</button>
+            <div style="display: flex; gap: 10px;">
+              <button class="btn btn-secondary" id="avatarCancelBtn" style="padding: 10px 18px;">Cancel</button>
+              <button class="btn btn-primary" id="avatarSaveBtn" style="padding: 10px 22px;">Save Photo</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Form Details Modal -->
+      <div class="modal-backdrop" id="formDetailModal" style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(74,74,74,0.4); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); display: none; align-items: center; justify-content: center; z-index: 10005;">
+        <div class="modal-card" style="background: #fff; border: 1px solid var(--card-border); border-radius: 20px; padding: 32px; width: 100%; max-width: 480px; box-shadow: 0 20px 50px rgba(0,0,0,0.1); text-align: left;">
+          <h3 id="formDetailTitle" style="font-family: 'Space Grotesk', sans-serif; font-size: 18px; font-weight: 700; margin-bottom: 8px; color: var(--text-main);">Form Details</h3>
+          <p id="formDetailDate" style="font-size: 12px; color: var(--text-muted); margin-bottom: 16px;">Completed on Aug 25, 2026</p>
+          <div id="formDetailContent" style="display: flex; flex-direction: column; gap: 10px; margin-bottom: 24px; max-height: 240px; overflow-y: auto; padding-right: 8px;">
+            <!-- details injected dynamically -->
+          </div>
+          <div style="display: flex; justify-content: flex-end;">
+            <button class="btn btn-primary" id="formDetailCloseBtn" style="padding: 10px 20px;">Close</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Custom Form Builder Modal -->
+      <div class="modal-backdrop" id="customFormBuilderModal" style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(74,74,74,0.4); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); display: none; align-items: center; justify-content: center; z-index: 10005;">
+        <div class="modal-card" style="background: #fff; border: 1px solid var(--card-border); border-radius: 20px; padding: 32px; width: 100%; max-width: 600px; box-shadow: 0 20px 50px rgba(0,0,0,0.1); text-align: left; display: flex; flex-direction: column; max-height: 85vh;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+            <h3 style="font-family: 'Space Grotesk', sans-serif; font-size: 18px; font-weight: 700; color: var(--text-main);">🛠️ Recurring Form Sync Builder</h3>
+            <button id="customFormCloseBtn" style="background: none; border: none; font-size: 24px; cursor: pointer; color: var(--text-muted); line-height: 1;">&times;</button>
+          </div>
+          <p style="font-size: 12.5px; color: var(--text-muted); margin-bottom: 20px;">Design a customized structure of headers (categories) and sub-headers (fields) to sync automatically daily.</p>
+          
+          <!-- Form Metadata -->
+          <div style="margin-bottom: 20px;">
+            <label style="display: block; font-size: 12px; font-weight: 700; text-transform: uppercase; color: var(--text-muted); margin-bottom: 6px;">Form Name</label>
+            <input type="text" id="customFormName" placeholder="e.g., Daily Habit Tracker" style="width: 100%; padding: 10px 14px; border-radius: 8px; border: 1px solid var(--card-border); font-size: 14px; outline: none; background: transparent; color: var(--text-main);">
+          </div>
+          
+          <!-- Sections Workspace (Scrollable) -->
+          <div id="customFormSectionsWorkspace" style="flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 16px; margin-bottom: 20px; padding-right: 8px;">
+            <!-- Category sections injected here dynamically -->
+          </div>
+          
+          <!-- Add Category Button -->
+          <button type="button" class="btn btn-secondary" id="addCategoryBtn" style="padding: 10px 16px; font-size: 13px; font-weight: 600; display: inline-flex; align-items: center; justify-content: center; gap: 6px; border-style: dashed; border-width: 1.5px; margin-bottom: 20px; width: 100%;">
+            ➕ Add Section Header
+          </button>
+          
+          <!-- Footer Actions -->
+          <div style="display: flex; justify-content: flex-end; gap: 12px; border-top: 1px solid var(--card-border); padding-top: 20px;">
+            <button class="btn btn-secondary" id="customFormCancelBtn" style="padding: 10px 20px;">Cancel</button>
+            <button class="btn btn-primary" id="customFormSaveBtn" style="padding: 10px 24px;">Save & Sync Form</button>
+          </div>
+        </div>
       </div>
     </main>
   </div>
+  <div class="drawer-backdrop" id="settingsBackdrop"></div>
+
+  <!-- Settings Side Panel Drawer -->
+  <div class="drawer-panel" id="settingsSidePanel">
+    <div class="drawer-header">
+      <h3>⚙️ Campus Copilot Settings</h3>
+      <button class="drawer-close-btn" id="closeSettingsPanelBtn">&times;</button>
+    </div>
+    <div class="drawer-content">
+      <!-- Vertical Navigation Menu -->
+      <nav class="drawer-sidebar">
+        <button class="drawer-tab-btn active" data-settings-tab="general">General</button>
+        <button class="drawer-tab-btn" data-settings-tab="account">Account</button>
+        <button class="drawer-tab-btn" data-settings-tab="notifications">Notifications</button>
+      </nav>
+      
+      <!-- Settings Tab Viewport Content -->
+      <div class="drawer-tab-viewport">
+        <!-- GENERAL TAB -->
+        <div class="drawer-tab-panel active" id="settings-tab-general">
+          <h4 style="font-family: 'Space Grotesk', sans-serif; font-size: 16px; margin-bottom: 12px;">General Automation</h4>
+          <div class="form-group">
+            <label style="display: inline-flex; align-items: center; gap: 10px; cursor: pointer; text-transform: none; font-weight: normal; letter-spacing: 0;">
+              <input type="checkbox" id="settingsToggleAi" checked style="width: auto;">
+              <span>Enable AI Auto-Fill Recommendations</span>
+            </label>
+          </div>
+          <div class="form-group" style="margin-top: 12px;">
+            <label style="display: inline-flex; align-items: center; gap: 10px; cursor: pointer; text-transform: none; font-weight: normal; letter-spacing: 0;">
+              <input type="checkbox" id="settingsToggleClear" checked style="width: auto;">
+              <span>Auto-clear cache on profile export</span>
+            </label>
+          </div>
+          <button class="btn btn-primary" id="saveGeneralSettingsBtn" style="margin-top: 20px;">Save General Settings</button>
+        </div>
+
+        <!-- ACCOUNT TAB -->
+        <div class="drawer-tab-panel" id="settings-tab-account">
+          <h4 style="font-family: 'Space Grotesk', sans-serif; font-size: 16px; margin-bottom: 12px;">Reset Vault Credentials</h4>
+          <div class="form-group">
+            <label>Current Security Passcode</label>
+            <input type="password" id="currentPasscode" placeholder="••••••••">
+          </div>
+          <div class="form-group" style="margin-top: 12px;">
+            <label>New Security Passcode</label>
+            <input type="password" id="newPasscode" placeholder="••••••••">
+          </div>
+          <button class="btn btn-primary" id="saveAccountSettingsBtn" style="margin-top: 20px;">Update Passcode</button>
+        </div>
+
+        <!-- NOTIFICATIONS TAB -->
+        <div class="drawer-tab-panel" id="settings-tab-notifications">
+          <h4 style="font-family: 'Space Grotesk', sans-serif; font-size: 16px; margin-bottom: 12px;">Vault Alerts & Preferences</h4>
+          <div class="form-group">
+            <label style="display: inline-flex; align-items: center; gap: 10px; cursor: pointer; text-transform: none; font-weight: normal; letter-spacing: 0;">
+              <input type="checkbox" checked style="width: auto;">
+              <span>Email updates for deadline warnings</span>
+            </label>
+          </div>
+          <div class="form-group" style="margin-top: 12px;">
+            <label style="display: inline-flex; align-items: center; gap: 10px; cursor: pointer; text-transform: none; font-weight: normal; letter-spacing: 0;">
+              <input type="checkbox" checked style="width: auto;">
+              <span>Browser notification on form autofill</span>
+            </label>
+          </div>
+          <button class="btn btn-primary" id="saveNotificationSettingsBtn" style="margin-top: 20px;">Update Alerts</button>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <div id="toast" class="toast">Saved Successfully! ✅</div>
+  <script src="lib/supabase.js"></script>
+  <script src="lib/supabaseClient.js"></script>
   <script src="dashboard.js"></script>
+  <script src="chatbot.js" defer></script>
 </body>
 </html>

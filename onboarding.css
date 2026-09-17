@@ -1,0 +1,302 @@
+/* ==========================================================================
+   Campus Copilot Student Profile Onboarding Stylesheet
+   ========================================================================== */
+
+:root {
+  --bg-base: #FFFBF7;          /* Pale Cream base background */
+  --sidebar-bg: #FAB1A0;       /* Dusty Rose Pink sidebar panel */
+  --card-bg: #FFFFFF;          /* Crisp White card container */
+  --card-border: rgba(74, 74, 74, 0.12); /* Subtle outline border */
+  --card-hover-border: #2A9D8F; /* Deep Ocean Teal hover outline border */
+  --accent-teal: #38A3A5;
+  --accent-rose: #FAB1A0;
+  --mint-green: #2A9D8F;       /* Deep Ocean Teal highlighting */
+  --text-main: #4A4A4A;        /* Default typography color */
+  --text-muted: rgba(74, 74, 74, 0.7); /* Translucent details text */
+  --white: #FFFFFF;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: 'Inter', sans-serif;
+}
+
+body {
+  background-color: var(--bg-base);
+  background: radial-gradient(circle at 50% 0%, rgba(250, 177, 160, 0.15) 0%, rgba(129, 236, 236, 0.05) 0%, var(--bg-base) 80%);
+  color: var(--text-main);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 40px 20px;
+}
+
+/* Onboarding Outer Container Layout */
+.onboarding-container {
+  width: 100%;
+  max-width: 640px;
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 24px;
+  padding: 40px;
+  box-shadow: 0 12px 36px rgba(74, 74, 74, 0.05);
+  animation: loadUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes loadUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Stepper Header Progress Indicator styling */
+.stepper-header {
+  margin-bottom: 32px;
+  border-bottom: 1.5px solid rgba(74, 74, 74, 0.08);
+  padding-bottom: 24px;
+}
+
+.stepper-title-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 12px;
+}
+
+.stepper-title-row h2 {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--text-main);
+}
+
+.stepper-completion {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--mint-green);
+}
+
+.progress-bar-bg {
+  width: 100%;
+  height: 8px;
+  background-color: rgba(74, 74, 74, 0.08);
+  border-radius: 99px;
+  overflow: hidden;
+  margin-bottom: 8px;
+}
+
+.progress-bar-fill {
+  height: 100%;
+  background-color: var(--mint-green);
+  border-radius: 99px;
+  width: 0%;
+  transition: width 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.stepper-subinfo {
+  font-size: 12.5px;
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
+/* Stepper steps panels logic styling */
+.step-panel {
+  display: none;
+}
+
+.step-panel.active {
+  display: block;
+}
+
+.step-heading {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 18px;
+  font-weight: 700;
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Form layouts */
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  margin-bottom: 20px;
+}
+
+@media (max-width: 480px) {
+  .form-row {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+}
+
+.form-group {
+  margin-bottom: 20px;
+  text-align: left;
+}
+
+.form-group.full-width {
+  grid-column: span 2;
+}
+
+@media (max-width: 480px) {
+  .form-group.full-width {
+    grid-column: span 1;
+  }
+}
+
+label {
+  display: block;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--text-muted);
+  margin-bottom: 8px;
+}
+
+input, select, textarea {
+  width: 100%;
+  background: #FFFFFF;
+  border: 1px solid rgba(74, 74, 74, 0.2);
+  color: var(--text-main);
+  padding: 12px 16px;
+  border-radius: 8px;
+  font-size: 14px;
+  outline: none;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+input:focus, select:focus, textarea:focus {
+  border-color: var(--mint-green);
+  box-shadow: 0 0 0 3px rgba(42, 157, 143, 0.15);
+}
+
+/* Google Connected profile card */
+.google-profile-card {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  background-color: rgba(74, 74, 74, 0.03);
+  border: 1px solid var(--card-border);
+  padding: 16px;
+  border-radius: 16px;
+  margin-bottom: 24px;
+}
+
+.google-avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  border: 1.5px solid var(--text-main);
+  object-fit: cover;
+  background-color: var(--white);
+}
+
+.google-details p {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text-main);
+}
+
+.google-details span {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.import-badge {
+  display: inline-block;
+  font-size: 10px;
+  font-weight: 700;
+  background-color: rgba(42, 157, 143, 0.1);
+  color: var(--mint-green);
+  padding: 2px 8px;
+  border-radius: 99px;
+  margin-top: 4px;
+}
+
+/* Form Action Buttons Row styling */
+.action-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-top: 1.5px solid rgba(74, 74, 74, 0.08);
+  padding-top: 24px;
+  margin-top: 32px;
+}
+
+.btn {
+  padding: 12px 24px;
+  border-radius: 12px;
+  font-size: 14.5px;
+  font-weight: 700;
+  cursor: pointer;
+  border: 1px solid rgba(74, 74, 74, 0.15);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.btn-secondary {
+  background: var(--white);
+  color: var(--text-main);
+}
+
+.btn-secondary:hover {
+  background: rgba(74, 74, 74, 0.04);
+}
+
+.btn-primary {
+  background: var(--mint-green);
+  color: var(--white);
+  box-shadow: 0 4px 12px rgba(42, 157, 143, 0.2);
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(42, 157, 143, 0.3);
+}
+
+/* Step 6: Review Summary Cards */
+.review-card {
+  border: 1px solid var(--card-border);
+  border-radius: 16px;
+  padding: 20px;
+  margin-bottom: 16px;
+  text-align: left;
+}
+
+.review-card h4 {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--mint-green);
+  margin-bottom: 12px;
+}
+
+.review-item {
+  display: flex;
+  justify-content: space-between;
+  font-size: 13px;
+  margin-bottom: 8px;
+}
+
+.review-item:last-child {
+  margin-bottom: 0;
+}
+
+.review-label {
+  font-weight: 600;
+  color: var(--text-muted);
+}
+
+.review-val {
+  font-weight: 500;
+  color: var(--text-main);
+  text-align: right;
+  max-width: 60%;
+  word-wrap: break-word;
+}

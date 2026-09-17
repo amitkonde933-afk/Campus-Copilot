@@ -1,0 +1,729 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Campus Copilot - Complete Student Profile Onboarding</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="onboarding.css">
+</head>
+<body>
+  <div class="onboarding-container">
+    
+    <!-- Stepper Header Progress Indicators -->
+    <div class="stepper-header">
+      <div class="stepper-title-row" style="display: flex; align-items: center; justify-content: space-between;">
+        <div style="display: flex; align-items: center; gap: 12px;">
+          <img src="icons/campus_copilot_icon.svg" alt="Logo" style="width: 32px; height: 32px;">
+          <h2>Student Profile Setup</h2>
+        </div>
+        <span class="stepper-completion" id="completionText">15% Complete</span>
+      </div>
+      <div class="progress-bar-bg">
+        <div class="progress-bar-fill" id="progressBarFill"></div>
+      </div>
+      <div class="stepper-subinfo" id="subinfoText">Step 1 of 6: Personal details</div>
+    </div>
+
+    <!-- Google Connected Card -->
+    <div class="google-profile-card">
+      <img id="userAvatar" src="https://lh3.googleusercontent.com/a/default-user" alt="Avatar" class="google-avatar">
+      <div class="google-details">
+        <p id="userNameText">Alex Johnson</p>
+        <span id="userEmailText">alex.j@gmail.com</span>
+        <div><span class="import-badge">✓ Google Account Connected</span></div>
+      </div>
+    </div>
+
+    <!-- Multi-Step Wizard Forms -->
+    <form id="onboardingForm">
+      
+      <!-- STEP 1: Personal Information -->
+      <div class="step-panel active" data-step="1">
+        <h3 class="step-heading">👤 Personal details</h3>
+        
+        <div class="form-row">
+          <div class="form-group full-width">
+            <label for="fullName">Student name <span style="color:var(--mint-green); font-size:10px; text-transform:none;">(Imported from Google)</span></label>
+            <input type="text" id="fullName" placeholder="e.g., Alex Johnson" required>
+          </div>
+        </div>
+        
+        <div class="form-row">
+          <div class="form-group">
+            <label for="preferredName">Preferred Name / Alias</label>
+            <input type="text" id="preferredName" placeholder="e.g., AJ">
+          </div>
+          <div class="form-group">
+            <label for="dob">Date of birth</label>
+            <input type="text" id="dob" placeholder="e.g., 14/08/2005" required>
+          </div>
+        </div>
+      </div>
+
+      <!-- STEP 2: Contact Information -->
+      <div class="step-panel" data-step="2">
+        <h3 class="step-heading">📞 Contact Information</h3>
+        
+        <div class="form-row">
+          <div class="form-group">
+            <label for="personalEmail">Email ID (Personal) <span style="color:var(--mint-green); font-size:10px; text-transform:none;">(Imported)</span></label>
+            <input type="email" id="personalEmail" placeholder="e.g., alex.j@gmail.com" required>
+          </div>
+          <div class="form-group">
+            <label for="phoneNumber">Contact Number</label>
+            <input type="tel" id="phoneNumber" placeholder="e.g., +1 555 123 4567" required>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="alternatePhone">Alternate Contact Number</label>
+            <input type="tel" id="alternatePhone" placeholder="e.g., +1 555 987 6543">
+          </div>
+          <div class="form-group">
+            <label for="address1">Address line 1</label>
+            <input type="text" id="address1" placeholder="e.g., 123 Maple Street" required>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="address2">Address line 2</label>
+            <input type="text" id="address2" placeholder="e.g., Apartment 4B" required>
+          </div>
+          <div class="form-group">
+            <label for="address3">Address line 3 (Optional)</label>
+            <input type="text" id="address3" placeholder="e.g., Near Central Park">
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="locality">Locality</label>
+            <input type="text" id="locality" placeholder="e.g., Downtown District" required>
+          </div>
+          <div class="form-group">
+            <label for="landmark">Landmark</label>
+            <input type="text" id="landmark" placeholder="e.g., Next to City Library" required>
+          </div>
+        </div>
+      </div>
+
+      <!-- STEP 3: Education Details -->
+      <div class="step-panel" data-step="3">
+        <h3 class="step-heading">🏛️ Academics & Education</h3>
+        
+        <div class="form-row">
+          <div class="form-group full-width">
+            <label for="collegeName">College Name</label>
+            <input type="text" id="collegeName" placeholder="e.g., State University of Technology" required>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="courseInfo">Course Information</label>
+            <input type="text" id="courseInfo" placeholder="e.g., Computer Science Engineering" required>
+          </div>
+          <div class="form-group">
+            <label for="degreePref">Degree preferences</label>
+            <input type="text" id="degreePref" placeholder="e.g., B.Tech" required>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="studyingYear">Studying Year</label>
+            <input type="text" id="studyingYear" placeholder="e.g., 2nd Year" required>
+          </div>
+          <div class="form-group">
+            <label for="gradYear">Graduation year /Batch</label>
+            <input type="text" id="gradYear" placeholder="e.g., 2027" required>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group full-width">
+            <label for="batchSection">Section/Batch/Group</label>
+            <input type="text" id="batchSection" placeholder="e.g., Batch A" required>
+          </div>
+        </div>
+      </div>
+
+      <!-- STEP 4: Parent / Guardian details -->
+      <div class="step-panel" data-step="4">
+        <h3 class="step-heading">👨‍👩‍👦 Family & Guardian Records</h3>
+        
+        <div class="form-row">
+          <div class="form-group">
+            <label for="parentName">Parent Name</label>
+            <input type="text" id="parentName" placeholder="e.g., Michael Johnson" required>
+          </div>
+          <div class="form-group">
+            <label for="parentRelation">Parent Relation</label>
+            <input type="text" id="parentRelation" placeholder="e.g., Father" required>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="parentEmail">Parent Email ID</label>
+            <input type="email" id="parentEmail" placeholder="e.g., michael.j@example.com" required>
+          </div>
+          <div class="form-group">
+            <label for="parentPhone">Parent Contact Number</label>
+            <input type="tel" id="parentPhone" placeholder="e.g., +1 987 654 3210" required>
+          </div>
+        </div>
+      </div>
+
+      <!-- STEP 5: Identification Fields -->
+      <div class="step-panel" data-step="5">
+        <h3 class="step-heading">🆔 Campus Credentials</h3>
+        
+        <div class="form-row">
+          <div class="form-group">
+            <label for="rollNo">Student ID</label>
+            <input type="text" id="rollNo" placeholder="e.g., 26BCS10220" required>
+          </div>
+          <div class="form-group">
+            <label for="numericRoll">Roll No</label>
+            <input type="text" id="numericRoll" placeholder="e.g., 10220" required>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group full-width">
+            <label for="collegeEmail">College Email ID</label>
+            <input type="email" id="collegeEmail" placeholder="e.g., alex.j@university.edu" required>
+          </div>
+        </div>
+      </div>
+
+      <!-- STEP 6: Review & Finalize -->
+      <div class="step-panel" data-step="6">
+        <h3 class="step-heading">✓ Review & Complete</h3>
+        <p style="font-size:13.5px; color:var(--text-muted); margin-bottom:24px;">Please review your details. Manually updated parameters will display with source tags.</p>
+        
+        <div class="review-card">
+          <h4>👤 Personal & Contact</h4>
+          <div class="review-item">
+            <span class="review-label">Student Name:</span>
+            <span class="review-val" id="rev-fullName">-</span>
+          </div>
+          <div class="review-item">
+            <span class="review-label">Date of Birth:</span>
+            <span class="review-val" id="rev-dob">-</span>
+          </div>
+          <div class="review-item">
+            <span class="review-label">Personal Email:</span>
+            <span class="review-val" id="rev-email">-</span>
+          </div>
+          <div class="review-item">
+            <span class="review-label">Contact:</span>
+            <span class="review-val" id="rev-phone">-</span>
+          </div>
+        </div>
+
+        <div class="review-card">
+          <h4>🏛️ Academics & Family</h4>
+          <div class="review-item">
+            <span class="review-label">College Name:</span>
+            <span class="review-val" id="rev-college">-</span>
+          </div>
+          <div class="review-item">
+            <span class="review-label">Course / Degree:</span>
+            <span class="review-val" id="rev-degree">-</span>
+          </div>
+          <div class="review-item">
+            <span class="review-label">Roll Number / ID:</span>
+            <span class="review-val" id="rev-roll">-</span>
+          </div>
+          <div class="review-item">
+            <span class="review-label">Parent Record:</span>
+            <span class="review-val" id="rev-parent">-</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Stepper Action controls -->
+      <div class="action-row">
+        <button type="button" class="btn btn-secondary" id="backBtn" disabled>Back</button>
+        <button type="button" class="btn btn-primary" id="nextBtn">Save & Continue</button>
+      </div>
+    </form>
+  </div>
+
+  <script src="lib/supabase.js"></script>
+  <script src="lib/supabaseClient.js"></script>
+  <script>
+    let currentStep = 1;
+    const totalSteps = 6;
+    let userId = '';
+
+    // Mapped input element IDs for profile calculations
+    const profileInputs = [
+      'fullName', 'preferredName', 'dob', 'personalEmail', 'phoneNumber',
+      'alternatePhone', 'address1', 'address2', 'address3', 'locality', 'landmark',
+      'collegeName', 'courseInfo', 'degreePref', 'studyingYear', 'gradYear', 'batchSection',
+      'parentName', 'parentRelation', 'parentEmail', 'parentPhone', 'rollNo', 'numericRoll', 'collegeEmail'
+    ];
+
+    // On page initialization
+    document.addEventListener("DOMContentLoaded", () => {
+      // 1. Fetch Session Node (Route protection)
+      const verifySession = (session) => {
+        if (!session) {
+          // Send back if unauthenticated
+          window.location.href = 'agent/login-panel.html';
+          return;
+        }
+
+        userId = session.userId;
+
+        const checkRedirectAndInit = (studentProfiles) => {
+          const profiles = studentProfiles || {};
+          const profile = profiles[userId];
+          if (profile && profile.onboardingComplete === true) {
+            window.location.href = 'dashboard.html';
+            return;
+          }
+
+          // Continue initializing onboarding views
+          document.getElementById('userNameText').innerText = session.name;
+          document.getElementById('userEmailText').innerText = session.email;
+          if (session.picture) {
+            document.getElementById('userAvatar').src = session.picture;
+          }
+
+          // Pre-fill defaults from Google payload
+          document.getElementById('fullName').value = session.name;
+          document.getElementById('personalEmail').value = session.email;
+
+          // Load onboarding progress
+          loadOnboardingProgress();
+
+          // Restore draft if any exists
+          restoreDraftProfile();
+
+          // Setup change event listeners to auto-save draft
+          profileInputs.forEach(id => {
+            const el = document.getElementById(id);
+            if (el) {
+              el.addEventListener('input', () => {
+                saveDraftProfile();
+              });
+            }
+          });
+        };
+
+        if (typeof chrome !== 'undefined' && chrome.storage && chrome.storage.local) {
+          chrome.storage.local.get(['studentProfiles'], (result) => {
+            checkRedirectAndInit(result.studentProfiles);
+          });
+        } else {
+          const profiles = JSON.parse(localStorage.getItem('studentProfiles') || '{}');
+          checkRedirectAndInit(profiles);
+        }
+      };
+
+      if (typeof chrome !== 'undefined' && chrome.storage && chrome.storage.local) {
+        chrome.storage.local.get(['ccSession'], (result) => {
+          verifySession(result.ccSession);
+        });
+      } else {
+        const sessionStr = localStorage.getItem('ccSession');
+        verifySession(sessionStr ? JSON.parse(sessionStr) : null);
+      }
+
+      // Bind button controls
+      document.getElementById('backBtn').addEventListener('click', prevStep);
+      document.getElementById('nextBtn').addEventListener('click', handleNextClick);
+
+      // Recalculate indicators on input change
+      profileInputs.forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.addEventListener('input', updateCompletionProgress);
+      });
+    });
+
+    // Renders active stepper panel and progresses bar
+    function updateStepView() {
+      document.querySelectorAll('.step-panel').forEach(panel => {
+        panel.classList.remove('active');
+        if (parseInt(panel.dataset.step) === currentStep) {
+          panel.classList.add('active');
+        }
+      });
+
+      // Update control labels
+      document.getElementById('backBtn').disabled = (currentStep === 1);
+      
+      if (currentStep === totalSteps) {
+        document.getElementById('nextBtn').innerText = 'Submit Profile & Enter Dashboard';
+        renderReviewSummary();
+      } else {
+        document.getElementById('nextBtn').innerText = 'Save & Continue';
+      }
+
+      // Subheading descriptors
+      const stepNames = [
+        'Personal details',
+        'Contact Information',
+        'Academics & Education',
+        'Family & Guardian Records',
+        'Campus Credentials',
+        'Review & Finalize'
+      ];
+      document.getElementById('subinfoText').innerText = `Step ${currentStep} of ${totalSteps}: ${stepNames[currentStep - 1]}`;
+
+      updateCompletionProgress();
+      window.scrollTo(0, 0);
+    }
+
+    // Navigates stepper forward
+    function handleNextClick() {
+      // Form field validation checks
+      const activePanel = document.querySelector(`.step-panel[data-step="${currentStep}"]`);
+      const inputs = activePanel.querySelectorAll('input[required], select[required], textarea[required]');
+      let isValid = true;
+
+      inputs.forEach(input => {
+        if (!input.value.trim()) {
+          isValid = false;
+          input.style.borderColor = '#f43f5e';
+          input.addEventListener('input', () => { input.style.borderColor = ''; }, { once: true });
+        }
+      });
+
+      if (!isValid) {
+        alert("Please fill in all required fields before continuing.");
+        return;
+      }
+
+      // Save progress locally at each forward step
+      saveProgressStep();
+
+      if (currentStep < totalSteps) {
+        currentStep++;
+        updateStepView();
+      } else {
+        // Final submit profiles to primary registries
+        finalizeOnboardingProfile();
+      }
+    }
+
+    function prevStep() {
+      if (currentStep > 1) {
+        currentStep--;
+        updateStepView();
+      }
+    }
+
+    // Calculates completion progress
+    function updateCompletionProgress() {
+      let filled = 0;
+      profileInputs.forEach(id => {
+        const el = document.getElementById(id);
+        if (el && el.value.trim()) {
+          filled++;
+        }
+      });
+
+      const percentage = Math.round((filled / profileInputs.length) * 100);
+      document.getElementById('completionText').innerText = `${percentage}% Complete`;
+      document.getElementById('progressBarFill').style.width = `${percentage}%`;
+    }
+
+    // Prepares summaries inside Review step
+    function renderReviewSummary() {
+      document.getElementById('rev-fullName').innerText = document.getElementById('fullName').value || '-';
+      document.getElementById('rev-dob').innerText = document.getElementById('dob').value || '-';
+      document.getElementById('rev-email').innerText = document.getElementById('personalEmail').value || '-';
+      document.getElementById('rev-phone').innerText = document.getElementById('phoneNumber').value || '-';
+      document.getElementById('rev-college').innerText = document.getElementById('collegeName').value || '-';
+      
+      const course = document.getElementById('courseInfo').value;
+      const deg = document.getElementById('degreePref').value;
+      document.getElementById('rev-degree').innerText = (course && deg) ? `${deg} (${course})` : '-';
+      
+      document.getElementById('rev-roll').innerText = document.getElementById('rollNo').value || '-';
+      
+      const parent = document.getElementById('parentName').value;
+      const rel = document.getElementById('parentRelation').value;
+      document.getElementById('rev-parent').innerText = (parent && rel) ? `${parent} [${rel}]` : '-';
+    }
+
+    // Persists partial profile progress
+    function saveProgressStep() {
+      const currentProfileData = {};
+      profileInputs.forEach(id => {
+        const el = document.getElementById(id);
+        if (el) currentProfileData[id] = el.value.trim();
+      });
+
+      // Calculate completion rating
+      let filled = 0;
+      profileInputs.forEach(id => {
+        if (currentProfileData[id]) filled++;
+      });
+      currentProfileData.profileCompletion = Math.round((filled / profileInputs.length) * 100);
+      currentProfileData.userId = userId;
+
+      const storeProfileData = (profiles) => {
+        profiles[userId] = currentProfileData;
+        
+        if (typeof chrome !== 'undefined' && chrome.storage && chrome.storage.local) {
+          chrome.storage.local.set({ studentProfiles: profiles });
+        } else {
+          localStorage.setItem('studentProfiles', JSON.stringify(profiles));
+        }
+      };
+
+      if (typeof chrome !== 'undefined' && chrome.storage && chrome.storage.local) {
+        chrome.storage.local.get(['studentProfiles'], (result) => {
+          storeProfileData(result.studentProfiles || {});
+        });
+      } else {
+        const profiles = JSON.parse(localStorage.getItem('studentProfiles') || '{}');
+        storeProfileData(profiles);
+      }
+    }
+
+    // Finalizes and submits onboarding profile
+    async function finalizeOnboardingProfile() {
+      const finalProfileData = {};
+      profileInputs.forEach(id => {
+        const el = document.getElementById(id);
+        if (el) finalProfileData[id] = el.value.trim();
+      });
+      finalProfileData.profileCompletion = 100;
+      finalProfileData.onboardingComplete = true;
+      finalProfileData.userId = userId;
+
+      const isSupabaseConfigured = window.supabaseClient && !window.supabaseClient.supabaseUrl.includes('YOUR_PROJECT_REF');
+
+      // Helper to map and save profile data to Supabase PostgreSQL database
+      async function saveProfileToSupabase(profile) {
+        if (!isSupabaseConfigured) return true;
+        const dbData = {
+          user_id: userId,
+          full_name: profile.fullName,
+          dob: profile.dob || null,
+          phone_number: profile.phoneNumber,
+          personal_email: profile.personalEmail,
+          parent_name: profile.parentName,
+          parent_relation: profile.parentRelation,
+          parent_email: profile.parentEmail,
+          parent_phone: profile.parentPhone,
+          address1: profile.address1,
+          address2: profile.address2,
+          address3: profile.address3,
+          locality: profile.locality,
+          landmark: profile.landmark,
+          college_name: profile.collegeName,
+          course_info: profile.courseInfo,
+          degree_pref: profile.degreePref,
+          studying_year: profile.studyingYear,
+          reg_no: profile.regNo || '',
+          roll_no: profile.rollNo || '',
+          college_email: profile.collegeEmail,
+          numeric_roll: profile.numericRoll || '',
+          profile_completion: 100,
+          onboarding_complete: true
+        };
+
+        const { error: profileError } = await window.supabaseClient
+          .from('student_profiles')
+          .upsert(dbData, { onConflict: 'user_id' });
+
+        if (profileError) throw profileError;
+
+        // Also upsert default user settings
+        const { error: settingsError } = await window.supabaseClient
+          .from('user_settings')
+          .upsert({
+            user_id: userId,
+            theme: 'light',
+            accent_color: 'default',
+            density: 'comfortable',
+            switches: {
+              toggleAutosave: true,
+              toggleConfirmAuto: true,
+              toggleToasts: true,
+              toggleAnimations: true,
+              toggleAutofillEnabled: true,
+              toggleAssistantBadge: true,
+              toggleAutoDetect: true,
+              toggleConfirmSensitive: true,
+              toggleSemanticMatching: true,
+              toggleShowConfidence: true,
+              toggleAlertFormSuccess: true,
+              toggleAlertAutofillAvail: true,
+              toggleAlertMissingInfo: true,
+              toggleAlertLowConfidence: true,
+              toggleAlertConnection: true,
+              toggleAlertDeadlines: true,
+              toggleAiFormMatching: true,
+              toggleAiSemantic: true,
+              toggleAiConfidence: true,
+              toggleAiSuggestions: true
+            }
+          }, { onConflict: 'user_id' });
+
+        if (settingsError) throw settingsError;
+        return true;
+      }
+
+      try {
+        // Save to Supabase Cloud Database first (if configured)
+        await saveProfileToSupabase(finalProfileData);
+
+        const storeFinal = (profiles, generalData) => {
+          profiles[userId] = finalProfileData;
+          localStorage.removeItem('ccDraftProfile_' + userId);
+          
+          // Also map details to root level configurations so extension autofill uses them
+          const mergedData = { ...generalData, ...finalProfileData };
+          const cleanMergedData = { ...mergedData };
+          delete cleanMergedData.studentProfiles;
+          delete cleanMergedData.isLoggedIn;
+          delete cleanMergedData.ccSession;
+
+          if (typeof chrome !== 'undefined' && chrome.storage && chrome.storage.local) {
+            chrome.storage.local.set({ 
+              studentProfiles: profiles,
+              ...cleanMergedData
+            }, () => {
+              window.location.href = 'dashboard.html';
+            });
+          } else {
+            localStorage.setItem('studentProfiles', JSON.stringify(profiles));
+            Object.keys(cleanMergedData).forEach(key => {
+              localStorage.setItem(key, cleanMergedData[key]);
+            });
+            window.location.href = 'dashboard.html';
+          }
+        };
+
+        if (typeof chrome !== 'undefined' && chrome.storage && chrome.storage.local) {
+          chrome.storage.local.get(null, (result) => {
+            storeFinal(result.studentProfiles || {}, result);
+          });
+        } else {
+          const profiles = JSON.parse(localStorage.getItem('studentProfiles') || '{}');
+          const localData = {};
+          for (let i = 0; i < localStorage.length; i++) {
+            const key = localStorage.key(i);
+            localData[key] = localStorage.getItem(key);
+          }
+          storeFinal(profiles, localData);
+        }
+      } catch (err) {
+        alert('Failed to save profile to Supabase database: ' + err.message);
+      }
+    }
+
+    // Loads partial onboarding data back on reload
+    function loadOnboardingProgress() {
+      const loadProfile = (profiles) => {
+        const userProfile = profiles[userId];
+        if (!userProfile) {
+          updateStepView();
+          return;
+        }
+
+        profileInputs.forEach(id => {
+          const el = document.getElementById(id);
+          if (el && userProfile[id] !== undefined) {
+            el.value = userProfile[id];
+          }
+        });
+
+        // Fast forward to Step 1
+        updateStepView();
+      };
+
+      if (typeof chrome !== 'undefined' && chrome.storage && chrome.storage.local) {
+        chrome.storage.local.get(['studentProfiles'], (result) => {
+          loadProfile(result.studentProfiles || {});
+        });
+      } else {
+        const profiles = JSON.parse(localStorage.getItem('studentProfiles') || '{}');
+        loadProfile(profiles);
+      }
+    }
+
+    // Auto-save draft profile values
+    function saveDraftProfile() {
+      if (!userId) return;
+      const draftData = {};
+      profileInputs.forEach(id => {
+        const el = document.getElementById(id);
+        if (el) draftData[id] = el.value.trim();
+      });
+      localStorage.setItem('ccDraftProfile_' + userId, JSON.stringify(draftData));
+    }
+
+    // Restore draft profile values
+    function restoreDraftProfile() {
+      if (!userId) return;
+      const draftStr = localStorage.getItem('ccDraftProfile_' + userId);
+      if (!draftStr) return;
+      try {
+        const draftData = JSON.parse(draftStr);
+        let restoredCount = 0;
+        profileInputs.forEach(id => {
+          const el = document.getElementById(id);
+          if (el && draftData[id] && el.value.trim() !== draftData[id]) {
+            el.value = draftData[id];
+            restoredCount++;
+          }
+        });
+        if (restoredCount > 0) {
+          showOnboardingToast('Unsaved information restored.');
+          updateCompletionProgress();
+        }
+      } catch (e) {
+        console.error("Failed to restore draft profile", e);
+      }
+    }
+
+    // Onboarding custom Toast alert notification
+    function showOnboardingToast(msg) {
+      const toast = document.createElement('div');
+      toast.innerText = msg;
+      toast.style.position = 'fixed';
+      toast.style.bottom = '28px';
+      toast.style.right = '28px';
+      toast.style.background = '#2A9D8F';
+      toast.style.color = '#fff';
+      toast.style.padding = '12px 24px';
+      toast.style.borderRadius = '12px';
+      toast.style.boxShadow = '0 8px 24px rgba(42, 157, 143, 0.25)';
+      toast.style.fontFamily = '"Space Grotesk", sans-serif';
+      toast.style.fontSize = '13.5px';
+      toast.style.fontWeight = 'bold';
+      toast.style.zIndex = '99999';
+      toast.style.transition = 'all 0.4s ease';
+      toast.style.opacity = '0';
+      toast.style.transform = 'translateY(20px)';
+      document.body.appendChild(toast);
+      
+      setTimeout(() => {
+        toast.style.opacity = '1';
+        toast.style.transform = 'translateY(0)';
+      }, 50);
+
+      setTimeout(() => {
+        toast.style.opacity = '0';
+        toast.style.transform = 'translateY(20px)';
+        setTimeout(() => toast.remove(), 400);
+      }, 4000);
+    }
+  </script>
+</body>
+</html>
